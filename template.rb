@@ -25,10 +25,18 @@ def add_users
 end
 
 def add_bootstrap
+  gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap-sass', '~> 3.3.6'
 
-  # Replace Application SCSS
+  # Remove Application CSS
   run "rm app/assets/stylesheets/application.css"
+
+  # Add Bootstrap JS
+  insert_into_file(
+    "app/assets/javascripts/application.js",
+    "\n//= require jquery\n//= require bootstrap",
+    after: "//= require rails-ujs"
+  )
 end
 
 def copy_templates

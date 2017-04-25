@@ -5,7 +5,6 @@ end
 def add_users
   # Gemfile
   gem 'devise', '~> 4.2.1'
-  gem 'bootstrap-sass', '~> 3.3.6'
 
   # Install Devise
   rails_command "generate devise:install"
@@ -26,15 +25,10 @@ def add_users
 end
 
 def add_bootstrap
-  # Rename Application SCSS
-  run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss"
+  gem 'bootstrap-sass', '~> 3.3.6'
 
-  # Insert Bootstrap Styling
-  insert_into_file(
-    "app/assets/stylesheets/application.scss",
-    "@import 'bootstrap-sprockets';\n@import 'bootstrap'\n",
-    after: " */\n"
-  )
+  # Replace Application SCSS
+  run "rm app/assets/stylesheets/application.css"
 end
 
 def copy_templates

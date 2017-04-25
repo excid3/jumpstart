@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/head' %>
+  </head>
+
+  <body>
+    <%= render 'shared/navbar' %>
+    <%= render 'shared/notices' %>
+    <div class="container">
+      <%= yield %>
+    </div>
+    <hr>
+    <%= render 'shared/footer' %>
+  </body>
+</html>

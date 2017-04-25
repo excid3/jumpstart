@@ -1,40 +1,71 @@
-current_path = File.expand_path(File.dirname(__FILE__))
+def source_paths
+  [File.expand_path(File.dirname(__FILE__))]
+end
 
-# Add Devise to Gemfile
-gem "devise", "~> 4.2.1"
-gem "bootstrap-sass", "~> 3.3.6"
+def add_users
+  # Gemfile
+  gem 'devise', '~> 4.2.1'
+  gem 'bootstrap-sass', '~> 3.3.6'
 
-# Install Devise
-rails_command "generate devise:install"
+  # Install Devise
+  rails_command "generate devise:install"
 
-# Configure Devise
-environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }",
-            env: 'development'
-route "root to: 'home#index'"
-# Devise notices are installed via Bootstrap
-rails_command "generate devise:views User"
+  # Configure Devise
+  environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }",
+              env: 'development'
+  route "root to: 'home#index'"
 
-# Create Devise User
-generate :devise, "User",
-         "first_name",
-         "last_name",
-         "announcements_last_read_at:datetime"
+  # Devise notices are installed via Bootstrap
+  rails_command "generate devise:views User"
 
-# Rename Application SCSS
-run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss"
+  # Create Devise User
+  generate :devise, "User",
+           "first_name",
+           "last_name",
+           "announcements_last_read_at:datetime"
+end
 
-# Insert Bootstrap Styling
-insert_into_file(
-  "app/assets/stylesheets/application.scss",
-  "@import 'bootstrap-sprockets';\n@import 'bootstrap'\n",
-  before: "/*"
-)
+def add_bootstrap
+  # Rename Application SCSS
+  run "mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss"
 
-# Import Templates
-run "cp #{current_path}/views/layouts/application.html.erb app/views/layouts/application.html.erb"
-run "cp -R #{current_path}/views/shared app/views/shared"
+  # Insert Bootstrap Styling
+  insert_into_file(
+    "app/assets/stylesheets/application.scss",
+    "@import 'bootstrap-sprockets';\n@import 'bootstrap'\n",
+    after: " */\n"
+  )
+end
+
+def copy_templates
+  directory "app", force: true
+end
+
+def add_webpack
+  gem 'webpacker', '~> 1.1'
+  rails_command 'webpacker:install'
+end
+
+def add_sidekiq
+  gem 'sidekiq', '~> 5.0'
+  environment "config.active_job.queue_adapter = :sidekiq"
+end
+
+def add_foreman
+  gem 'foreman', '~> 0.84.0'
+  copy_file "Procfile"
+end
+
+# Main setup
+add_users
+add_bootstrap
+copy_templates
+add_sidekiq
+add_foreman
+add_webpack
 
 # Migrate
+rails_command "db:create"
 rails_command "db:migrate"
 
 after_bundle do

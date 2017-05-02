@@ -2,10 +2,16 @@ def source_paths
   [File.expand_path(File.dirname(__FILE__))]
 end
 
-def add_users
-  # Gemfile
+def add_gems
   gem 'devise', '~> 4.2.1'
+  gem 'jquery-rails', '~> 4.3.1'
+  gem 'bootstrap', '~> 4.0.0.alpha6'
+  gem 'webpacker', '~> 1.1'
+  gem 'sidekiq', '~> 5.0'
+  gem 'foreman', '~> 0.84.0'
+end
 
+def add_users
   # Install Devise
   rails_command "generate devise:install"
 
@@ -32,9 +38,6 @@ def add_users
 end
 
 def add_bootstrap
-  gem 'jquery-rails', '~> 4.3.1'
-  gem 'bootstrap-sass', '~> 3.3.6'
-
   # Remove Application CSS
   run "rm app/assets/stylesheets/application.css"
 
@@ -51,21 +54,19 @@ def copy_templates
 end
 
 def add_webpack
-  gem 'webpacker', '~> 1.1'
   rails_command 'webpacker:install'
 end
 
 def add_sidekiq
-  gem 'sidekiq', '~> 5.0'
   environment "config.active_job.queue_adapter = :sidekiq"
 end
 
 def add_foreman
-  gem 'foreman', '~> 0.84.0'
   copy_file "Procfile"
 end
 
 # Main setup
+add_gems
 add_users
 add_bootstrap
 copy_templates

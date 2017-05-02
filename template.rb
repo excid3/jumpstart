@@ -21,7 +21,14 @@ def add_users
   generate :devise, "User",
            "first_name",
            "last_name",
-           "announcements_last_read_at:datetime"
+           "announcements_last_read_at:datetime",
+           "admin:boolean"
+
+  # Set admin default to false
+  in_root do
+    migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
+    gsub_file migration, /:admin/, ":admin, default: false"
+  end
 end
 
 def add_bootstrap

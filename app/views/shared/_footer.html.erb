@@ -1,3 +1,9 @@
-<div class="container">
-  <p>Footer</p>
-</div>
+<footer class="footer text-muted">
+  <div class="container">
+    <span>© <%= Date.today.year %> Your Company</span>
+    <ul class="list-inline mb-0 float-right">
+      <li class="list-inline-item mr-3"><%= link_to "Terms", terms_path %></li>
+      <li class="list-inline-item mr-3"><%= link_to "Privacy", privacy_path %></li>
+    </ul>
+  </div>
+</footer>

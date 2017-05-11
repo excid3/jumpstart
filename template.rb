@@ -55,6 +55,9 @@ end
 
 def copy_templates
   directory "app", force: true
+
+  route "get '/terms', to: 'home#terms'"
+  route "get '/privacy', to: 'home#privacy'"
 end
 
 def add_webpack

@@ -3,4 +3,7 @@
 // $navbar-default-color: $light-orange;
 
 @import "bootstrap";
-// @import "home";
+
+body > .container {
+  margin-top: 40px;
+}

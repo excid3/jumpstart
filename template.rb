@@ -3,7 +3,7 @@ def source_paths
 end
 
 def add_gems
-  gem 'devise', '~> 4.2.1'
+  gem 'devise', github: 'plataformatec/devise' #, '~> 4.2.1'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.alpha6'
   gem 'webpacker', '~> 1.1'

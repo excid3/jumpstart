@@ -15,7 +15,7 @@ end
 
 def add_users
   # Install Devise
-  rails_command "generate devise:install"
+  generate "devise:install"
 
   # Configure Devise
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }",
@@ -23,7 +23,7 @@ def add_users
   route "root to: 'home#index'"
 
   # Devise notices are installed via Bootstrap
-  rails_command "generate devise:views"
+  generate "devise:views:bootstrapped"
 
   # Create Devise User
   generate :devise, "User",
@@ -40,8 +40,6 @@ def add_users
 end
 
 def add_bootstrap
-  generate "devise:views:bootstrapped"
-
   # Remove Application CSS
   run "rm app/assets/stylesheets/application.css"
 

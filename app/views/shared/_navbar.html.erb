@@ -10,7 +10,7 @@
       </ul>
 
       <ul class="navbar-nav">
-        <li class="nav-item"><%#= link_to "What's New", announcements_path, class: "nav-link #{unread_announcements(current_user)}" %></li>
+        <li class="nav-item"><%= link_to "What's New", announcements_path, class: "nav-link #{unread_announcements(current_user)}" %></li>
         <% if user_signed_in? %>
           <li class="nav-item">
             <a class="nav-link" href="javascript:void(0)" data-uv-lightbox="classic_widget" data-uv-mode="full" data-uv-primary-color="#3aa2e3" data-uv-link-color="#56b68b" data-uv-default-mode="support" data-uv-forum-id="259979">Support</a>

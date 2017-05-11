@@ -80,16 +80,24 @@ def add_foreman
   copy_file "Procfile"
 end
 
+def add_announcements
+  generate "model Announcement published_at:datetime announcement_type name description:text"
+  route "resources :announcements, only: [:index]"
+end
+
 # Main setup
 add_gems
 
 after_bundle do
   add_users
   add_bootstrap
-  copy_templates
   add_sidekiq
   add_foreman
   add_webpack
+
+  add_announcements
+
+  copy_templates
 
   # Migrate
   rails_command "db:create"

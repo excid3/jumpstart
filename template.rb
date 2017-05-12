@@ -4,7 +4,7 @@ end
 
 def add_gems
   gem 'devise', github: 'plataformatec/devise' #, '~> 4.2.1'
-  gem 'devise-bootstrapped', github: 'king601/devise-bootstrapped', branch: 'bootstrap4'
+  gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.alpha6'
   gem 'rails-assets-tether', '>= 1.3.3', source: 'https://rails-assets.org'

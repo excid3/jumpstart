@@ -3,6 +3,7 @@ def source_paths
 end
 
 def add_gems
+  gem 'administrate', github: 'tiagoamaro/administrate', branch: "allow-rails-5-1" #, '~> 0.7.0'
   gem 'devise', github: 'plataformatec/devise' #, '~> 4.2.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'jquery-rails', '~> 4.3.1'
@@ -83,6 +84,14 @@ def add_announcements
   route "resources :announcements, only: [:index]"
 end
 
+def add_administrate
+  generate "administrate:install"
+
+  gsub_file "app/dashboards/announcement_dashboard.rb",
+    /announcement_type: Field::String/,
+    "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
+end
+
 # Main setup
 add_gems
 
@@ -92,14 +101,17 @@ after_bundle do
   add_sidekiq
   add_foreman
   add_webpack
-
   add_announcements
-
-  copy_templates
 
   # Migrate
   rails_command "db:create"
   rails_command "db:migrate"
+
+  # Migrations must be done before this
+  add_administrate
+
+  copy_templates
+
 
   git :init
   git add: "."

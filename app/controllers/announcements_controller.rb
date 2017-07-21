@@ -8,6 +8,6 @@ class AnnouncementsController < ApplicationController
   private
 
     def mark_as_read
-      current_user.update(last_read_announcements_at: Time.zone.now)
+      current_user.update(announcements_last_read_at: Time.zone.now)
     end
 end

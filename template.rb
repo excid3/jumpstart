@@ -3,8 +3,8 @@ def source_paths
 end
 
 def add_gems
-  gem 'administrate', github: 'tiagoamaro/administrate', branch: "allow-rails-5-1" #, '~> 0.7.0'
-  gem 'devise', github: 'plataformatec/devise' #, '~> 4.2.1'
+  gem 'administrate', '~> 0.8.1'
+  gem 'devise', '~> 4.3.0'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.alpha6'

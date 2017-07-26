@@ -3,11 +3,8 @@
 // $navbar-default-color: $light-orange;
 
 @import "bootstrap";
+@import "sticky-footer";
 @import "announcements";
-
-body > .container {
-  margin-top: 40px;
-}
 
 // Fixes bootstrap nav-brand container overlap
 @include media-breakpoint-down(xs) {

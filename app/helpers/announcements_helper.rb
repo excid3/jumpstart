@@ -4,7 +4,7 @@ module AnnouncementsHelper
     return if last_announcement.nil?
 
     # Highlight announcements for anyone not logged in, cuz tempting
-    if user.nil? || user.last_read_announcements_at.nil? || user.last_read_announcements_at < last_announcement.published_at
+    if user.nil? || user.announcements_last_read_at.nil? || user.announcements_last_read_at < last_announcement.published_at
       "unread-announcements"
     end
   end

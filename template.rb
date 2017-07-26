@@ -6,6 +6,9 @@ def add_gems
   gem 'administrate', '~> 0.8.1'
   gem 'devise', '~> 4.3.0'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
+  gem 'devise_masquerade', '~> 0.6.0'
+  gem 'font-awesome-sass', '~> 4.7'
+  gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.alpha6'
   gem 'rails-assets-tether', '>= 1.3.3', source: 'https://rails-assets.org'
@@ -38,6 +41,9 @@ def add_users
     migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
+
+  # Add Devise masqueradable to users
+  #inject_into_file("app/models/user.rb", "masqueradable, :", :after => "devise :")
 end
 
 def add_bootstrap
@@ -54,6 +60,7 @@ end
 
 def copy_templates
   directory "app", force: true
+  directory "config", force: true
 
   route "get '/terms', to: 'home#terms'"
   route "get '/privacy', to: 'home#privacy'"
@@ -111,7 +118,6 @@ after_bundle do
   add_administrate
 
   copy_templates
-
 
   git :init
   git add: "."

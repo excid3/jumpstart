@@ -11,7 +11,7 @@ module AnnouncementsHelper
 
   def announcement_class(type)
     {
-      "new" => "text-sucess",
+      "new" => "text-success",
       "update" => "text-warning",
       "fix" => "text-danger",
     }.fetch(type, "text-success")

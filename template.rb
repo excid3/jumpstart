@@ -11,8 +11,7 @@ def add_gems
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.alpha6'
-  gem 'rails-assets-tether', '>= 1.3.3', source: 'https://rails-assets.org'
-  gem 'webpacker', '~> 1.1'
+  gem 'webpacker', '~> 3.0'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'
 end
@@ -53,7 +52,7 @@ def add_bootstrap
   # Add Bootstrap JS
   insert_into_file(
     "app/assets/javascripts/application.js",
-    "\n//= require jquery\n//= require tether\n//= require bootstrap",
+    "\n//= require jquery\n//= require popper\n//= require bootstrap",
     after: "//= require rails-ujs"
   )
 end

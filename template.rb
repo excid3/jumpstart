@@ -10,7 +10,7 @@ def add_gems
   gem 'font-awesome-sass', '~> 4.7'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
-  gem 'bootstrap', '~> 4.0.0.alpha6'
+  gem 'bootstrap', '~> 4.0.0.beta'
   gem 'webpacker', '~> 3.0'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'

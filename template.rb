@@ -35,13 +35,6 @@ def add_users
            "announcements_last_read_at:datetime",
            "admin:boolean"
 
-  # Use custom registrations controller
-  insert_into_file(
-    "config/routes.rb",
-    ", :controllers => { registrations: 'registrations' }",
-    after: "devise_for :users"
-  )
-
   # Set admin default to false
   in_root do
     migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }

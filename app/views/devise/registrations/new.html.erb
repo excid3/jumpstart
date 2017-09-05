@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+    <h1 class="text-center">Sign Up</h1>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="form-group">
+        <%= f.text_field :first_name, autofocus: true, class: 'form-control', placeholder: "First Name" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.text_field :last_name, autofocus: false, class: 'form-control', placeholder: "Last Name" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.email_field :email, autofocus: false, class: 'form-control', placeholder: "Email Address" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', placeholder: 'Confirm Password' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Sign up", class: "btn btn-primary btn-block btn-lg" %>
+      </div>
+    <% end %>
+
+    <div class="text-center">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

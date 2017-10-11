@@ -103,11 +103,11 @@ end
 
 def add_multiple_authentication
     insert_into_file "config/routes.rb",
-    ', controllers: { omniauth_callbacks: "users/omniauth_callbacks" }'
+    ', controllers: { omniauth_callbacks: "users/omniauth_callbacks" }',
     after: "  devise_for :users"
 
     insert_into_file "app/models/user.rb",
-    ', :omniauthable'
+    ', :omniauthable',
     after: '         :recoverable, :rememberable, :trackable, :validatable'    
 
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"

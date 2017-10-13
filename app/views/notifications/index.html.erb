@@ -1,0 +1,7 @@
+<h1>Notifications</h1>
+
+<ul>
+  <% @notifications.each do |notification| %>
+    <li><%= render "#{notification.action}_to_current_user", actor: notification.actor, notifiable: notification.notifiable  %></li>
+  <% end %>
+</ul>

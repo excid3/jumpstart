@@ -14,6 +14,9 @@ def add_gems
   gem 'webpacker', '~> 3.0'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'
+  gem 'omniauth-facebook', '~> 4.0'
+  gem 'omniauth-twitter', '~> 1.4'
+  gem 'omniauth-github', '~> 1.3'
 end
 
 def add_users
@@ -98,6 +101,23 @@ def add_administrate
     "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
 end
 
+def add_multiple_authentication
+    insert_into_file "config/routes.rb",
+    ', controllers: { omniauth_callbacks: "users/omniauth_callbacks" }',
+    after: "  devise_for :users"
+
+    insert_into_file "app/models/user.rb",
+    ', :omniauthable',
+    after: '         :recoverable, :rememberable, :trackable, :validatable'    
+
+    generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
+end
+
+def add_single_name_field 
+  generate "migration AddNameToUsers name:string"
+  generate "migration RemoveFirstAndLastNamesFromUsers first_name:string last_name:string"
+end
+
 # Main setup
 add_gems
 
@@ -108,6 +128,8 @@ after_bundle do
   add_foreman
   add_webpack
   add_announcements
+  add_multiple_authentication
+  add_single_name_field
 
   # Migrate
   rails_command "db:create"

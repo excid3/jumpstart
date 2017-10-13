@@ -4,9 +4,9 @@ class User < ApplicationRecord
   devise :masqueradable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :first_name, :last_name, presence: true
+  validates :name, presence: true
 
-  def name
-    "#{first_name} #{last_name}"
+  def first_name
+    name.split(' ').first
   end
 end

@@ -21,6 +21,12 @@
         <li class="nav-item"><%= link_to "What's New", announcements_path, class: "nav-link #{unread_announcements(current_user)}" %></li>
         <% if user_signed_in? %>
 
+        <li class="nav-item">
+          <%= link_to notifications_path, class: "nav-link" do %>
+            <span><i class="fa fa-flag-o" aria-hidden="true"></i></span>
+          <% end %>
+         </li>
+
           <li class="nav-item dropdown">
             <%= link_to root_path, id: "navbar-dropdown", class: "nav-link dropdown-toggle", data: { toggle: "dropdown" }, aria: { haspopup: true, expanded: false } do %>
               <%= image_tag gravatar_image_url(current_user.email, size: 40), height: 20, width: 20, class: "rounded" %>

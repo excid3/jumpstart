@@ -93,6 +93,11 @@ def add_announcements
   route "resources :announcements, only: [:index]"
 end
 
+def add_notifications
+  generate "model Notification recipient_id:integer actor_id:integer read_at:datetime action:string notifiable_id:integer notifiable_type:string"
+  route "resources :notifications, only: [:index]"
+end
+
 def add_administrate
   generate "administrate:install"
 
@@ -108,7 +113,7 @@ def add_multiple_authentication
 
     insert_into_file "app/models/user.rb",
     ', :omniauthable',
-    after: '         :recoverable, :rememberable, :trackable, :validatable'    
+    after: '         :recoverable, :rememberable, :trackable, :validatable'
 
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 end
@@ -123,6 +128,7 @@ after_bundle do
   add_foreman
   add_webpack
   add_announcements
+  add_notifications
   add_multiple_authentication
 
   # Migrate

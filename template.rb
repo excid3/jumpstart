@@ -33,8 +33,7 @@ def add_users
 
   # Create Devise User
   generate :devise, "User",
-           "first_name",
-           "last_name",
+           "name",
            "announcements_last_read_at:datetime",
            "admin:boolean"
 
@@ -113,11 +112,6 @@ def add_multiple_authentication
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 end
 
-def add_single_name_field 
-  generate "migration AddNameToUsers name:string"
-  generate "migration RemoveFirstAndLastNamesFromUsers first_name:string last_name:string"
-end
-
 # Main setup
 add_gems
 
@@ -129,7 +123,6 @@ after_bundle do
   add_webpack
   add_announcements
   add_multiple_authentication
-  add_single_name_field
 
   # Migrate
   rails_command "db:create"

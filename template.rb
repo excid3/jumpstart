@@ -33,8 +33,7 @@ def add_users
 
   # Create Devise User
   generate :devise, "User",
-           "first_name",
-           "last_name",
+           "name",
            "announcements_last_read_at:datetime",
            "admin:boolean"
 

@@ -127,14 +127,14 @@ after_bundle do
   add_notifications
   add_multiple_authentication
 
+  copy_templates
+
   # Migrate
   rails_command "db:create"
   rails_command "db:migrate"
 
   # Migrations must be done before this
   add_administrate
-
-  copy_templates
 
   git :init
   git add: "."

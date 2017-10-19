@@ -33,8 +33,7 @@ def add_users
 
   # Create Devise User
   generate :devise, "User",
-           "first_name",
-           "last_name",
+           "name",
            "announcements_last_read_at:datetime",
            "admin:boolean"
 
@@ -112,6 +111,12 @@ def add_multiple_authentication
     after: "  devise_for :users"
 
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
+  
+    insert_into_file "config/initializers/devise.rb",
+    "  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present? then (config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts') end \n
+    if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present? then (config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret) end \n
+    if Rails.application.secrets.github_app_id.present? && Rails.application.secrets.github_app_secret.present? then (config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret) end\n",
+          before: "  # ==> Warden configuration"
 end
 
 # Main setup

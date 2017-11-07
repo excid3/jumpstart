@@ -17,6 +17,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 4.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
+  gem 'pay'
 end
 
 def add_users
@@ -119,6 +120,9 @@ def add_multiple_authentication
           before: "  # ==> Warden configuration"
 end
 
+def add_payments
+  run "rails pay:install:migrations"
+end
 # Main setup
 add_gems
 

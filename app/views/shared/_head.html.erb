@@ -5,3 +5,5 @@
 <%= csrf_meta_tags %>
 <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 <%= javascript_include_tag 'application', src="https://js.stripe.com/v3/", 'data-turbolinks-track': 'reload' %>
+
+<%= tag :meta, name: "stripe-public-key", content: Rails.application.secrets.stripe_public_key %>

@@ -121,7 +121,7 @@ def add_multiple_authentication
 end
 
 def add_payments
-  run "rails pay:install:migrations"
+  rails_command "pay:install:migrations"
 end
 # Main setup
 add_gems
@@ -135,6 +135,7 @@ after_bundle do
   add_announcements
   add_notifications
   add_multiple_authentication
+  add_payments
 
   copy_templates
 

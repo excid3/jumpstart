@@ -43,8 +43,17 @@ def add_users
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
+  requirement = Gem::Requirement.new("> 5.1")
+  rails_version = Gem::Version.new(Rails::VERSION::STRING)
+
+  if requirement.satisfied_by? rails_version
+    gsub_file "config/initializers/devise.rb",
+      /  # config.secret_key =/,
+      "  config.secret_key = Rails.application.credentials.secret_key_base"
+  end
+
   # Add Devise masqueradable to users
-  #inject_into_file("app/models/user.rb", "masqueradable, :", :after => "devise :")
+  inject_into_file("app/models/user.rb", "masqueradable, :", :after => "devise :")
 end
 
 def add_bootstrap
@@ -103,6 +112,10 @@ def add_administrate
   gsub_file "app/dashboards/announcement_dashboard.rb",
     /announcement_type: Field::String/,
     "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
+
+  gsub_file "app/controllers/admin/application_controller.rb",
+    /# TODO Add authentication logic here\./,
+    "redirect_to '/', alert: 'Not authorized.' unless user_signed_in? && current_user.admin?"
 end
 
 def add_multiple_authentication
@@ -111,7 +124,7 @@ def add_multiple_authentication
     after: "  devise_for :users"
 
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
-  
+
     insert_into_file "config/initializers/devise.rb",
     "  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present? then (config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts') end \n
     if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present? then (config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret) end \n

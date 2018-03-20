@@ -48,12 +48,12 @@ def add_users
 
   if requirement.satisfied_by? rails_version
     gsub_file "config/initializers/devise.rb",
-      /  # config.secret_key =/,
+      /  # config.secret_key = .+/,
       "  config.secret_key = Rails.application.credentials.secret_key_base"
   end
 
   # Add Devise masqueradable to users
-  inject_into_file("app/models/user.rb", "masqueradable, :", :after => "devise :")
+  inject_into_file("app/models/user.rb", "omniauthable, :masqueradable, :", after: "devise :")
 end
 
 def add_bootstrap
@@ -125,10 +125,21 @@ def add_multiple_authentication
 
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
-    insert_into_file "config/initializers/devise.rb",
-    "  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present? then (config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts') end \n
-    if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present? then (config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret) end \n
-    if Rails.application.secrets.github_app_id.present? && Rails.application.secrets.github_app_secret.present? then (config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret) end\n",
+    template = """
+  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present?
+    config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts'
+  end
+
+  if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present?
+    config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret
+  end
+
+  if Rails.application.secrets.github_app_id.present? && Rails.application.secrets.github_app_secret.present?
+    config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret
+  end
+    """.strip
+
+    insert_into_file "config/initializers/devise.rb", "  " + template + "\n\n",
           before: "  # ==> Warden configuration"
 end
 

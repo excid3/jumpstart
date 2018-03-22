@@ -17,6 +17,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 4.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
+  gem 'whenever', require: false
 end
 
 def add_users
@@ -143,6 +144,10 @@ def add_multiple_authentication
           before: "  # ==> Warden configuration"
 end
 
+def add_whenever
+  run "wheneverize ."
+end
+
 # Main setup
 add_gems
 
@@ -164,6 +169,9 @@ after_bundle do
 
   # Migrations must be done before this
   add_administrate
+
+  add_whenever
+
 
   git :init
   git add: "."

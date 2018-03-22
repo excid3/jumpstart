@@ -17,6 +17,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 4.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
+  gem 'whenever', require: false
 end
 
 def add_users
@@ -43,7 +44,7 @@ def add_users
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  requirement = Gem::Requirement.new("> 5.1")
+  requirement = Gem::Requirement.new("> 5.2")
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
 
   if requirement.satisfied_by? rails_version
@@ -143,6 +144,10 @@ def add_multiple_authentication
           before: "  # ==> Warden configuration"
 end
 
+def add_whenever
+  run "wheneverize ."
+end
+
 # Main setup
 add_gems
 
@@ -164,6 +169,9 @@ after_bundle do
 
   # Migrations must be done before this
   add_administrate
+
+  add_whenever
+
 
   git :init
   git add: "."

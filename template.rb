@@ -4,7 +4,7 @@ end
 
 def add_gems
   gem 'administrate', '~> 0.8.1'
-  gem 'devise', '~> 4.3.0'
+  gem 'devise', '~> 4.4.3'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 0.6.0'
   gem 'font-awesome-sass', '~> 4.7'
@@ -43,7 +43,7 @@ def add_users
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  requirement = Gem::Requirement.new("> 5.1")
+  requirement = Gem::Requirement.new("> 5.2")
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
 
   if requirement.satisfied_by? rails_version

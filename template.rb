@@ -20,6 +20,20 @@ def add_gems
   gem 'whenever', require: false
 end
 
+def set_application_name
+  # Ask user for application name
+  application_name = ask("What is the name of your application? Default: Jumpstart")
+
+  # Checks if application name is empty and add default Jumpstart.
+  application_name = application_name.present? ? application_name : "Jumpstart"
+
+  # Add Application Name to Config
+  environment "config.application_name = '#{application_name}'"
+
+  # Announce the user where he can change the application name in the future.
+  puts "Your application name is #{application_name}. You can change this later on: ./config/application.rb"
+end
+
 def add_users
   # Install Devise
   generate "devise:install"
@@ -152,6 +166,7 @@ end
 add_gems
 
 after_bundle do
+  set_application_name
   add_users
   add_bootstrap
   add_sidekiq

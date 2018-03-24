@@ -87,6 +87,7 @@ end
 def copy_templates
   directory "app", force: true
   directory "config", force: true
+  directory "lib", force: true
 
   route "get '/terms', to: 'home#terms'"
   route "get '/privacy', to: 'home#privacy'"

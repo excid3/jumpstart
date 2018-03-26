@@ -2,6 +2,8 @@
 
 It's like Laravel Spark, for Rails. All your Rails apps should start off with a bunch of great defaults.
 
+**Note:** Requires Rails 5.2
+
 ## Getting Started
 
 Jumpstart is a Rails template, so you pass it in as an option when creating a new app.

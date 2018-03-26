@@ -12,6 +12,7 @@ def add_gems
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.beta'
+  gem 'mini_magick', '~> 4.8'
   gem 'webpacker', '~> 3.0'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'

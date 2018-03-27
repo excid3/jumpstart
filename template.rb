@@ -23,17 +23,11 @@ def add_gems
 end
 
 def set_application_name
-  # Ask user for application name
-  application_name = ask("What is the name of your application? Default: Jumpstart")
-
-  # Checks if application name is empty and add default Jumpstart.
-  application_name = application_name.present? ? application_name : "Jumpstart"
-
   # Add Application Name to Config
-  environment "config.application_name = '#{application_name}'"
+  environment "config.application_name = Rails.application.class.parent_name"
 
   # Announce the user where he can change the application name in the future.
-  puts "Your application name is #{application_name}. You can change this later on: ./config/application.rb"
+  puts "You can change application name inside: ./config/application.rb"
 end
 
 def add_users

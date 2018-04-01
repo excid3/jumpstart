@@ -203,14 +203,18 @@ after_bundle do
   add_notifications
   add_multiple_authentication
 
-  copy_templates
-
   # Migrate
   rails_command "db:create"
   rails_command "db:migrate"
 
   # Migrations must be done before this
   add_administrate
+
+  # override the administrate 'new user' form
+  generate "administrate:views:new User"
+  copy_templates # after generating the forms
+  gsub_file "app/views/admin/users/new.html.erb", /render "form"/, "render 'newform'"
+
 
   add_whenever
 

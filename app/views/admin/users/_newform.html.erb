@@ -1,0 +1,58 @@
+<%#
+# Form Partial
+
+This partial is rendered on a resource's `new` and `edit` pages,
+and renders all form fields for a resource's editable attributes.
+
+## Local variables:
+
+- `page`:
+  An instance of [Administrate::Page::Form][1].
+  Contains helper methods to display a form,
+  and knows which attributes should be displayed in the resource's form.
+
+[1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Form
+%>
+
+<%= form_for([namespace, page.resource], html: { class: "form" }) do |f| %>
+  <% if page.resource.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(page.resource.errors.count, "error") %>
+        prohibited this <%= page.resource_name %> from being saved:
+      </h2>
+
+      <ul>
+        <% page.resource.errors.full_messages.each do |message| %>
+          <li class="flash-error"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% field = page.attributes.select{ |item| item.attribute == :name }[0] %>
+  <div class="field-unit field-unit--<%= field.html_class %>">
+    <%= render_field field, f: f %>
+  </div>
+
+  <% field = page.attributes.select{ |item| item.attribute == :email }[0] %>
+  <div class="field-unit field-unit--<%= field.html_class %>">
+    <%= render_field field, f: f %>
+  </div>
+
+  <% data = field.data # from previous field %>
+  <% options = {} %>
+  <% field = Administrate::Field::String.new(:password, data, :form, options ) %>
+  <div class="field-unit field-unit--<%= field.html_class %>">
+    <%= render_field field, f: f %>
+  </div>
+
+  <% field = page.attributes.select{ |item| item.attribute == :admin }[0] %>
+  <div class="field-unit field-unit--<%= field.html_class %>">
+    <%= render_field field, f: f %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit %>
+  </div>
+<% end %>

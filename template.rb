@@ -43,6 +43,7 @@ def add_gems
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
   gem 'whenever', require: false
+  gem 'friendly_id', '~> 5.1.0'
 end
 
 def set_application_name
@@ -182,6 +183,10 @@ def add_whenever
   run "wheneverize ."
 end
 
+def add_friendly_id
+  generate "friendly_id"
+end
+
 def stop_spring
   run "spring stop"
 end
@@ -202,7 +207,8 @@ after_bundle do
   add_announcements
   add_notifications
   add_multiple_authentication
-
+  add_friendly_id
+  
   copy_templates
 
   # Migrate

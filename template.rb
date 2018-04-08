@@ -31,12 +31,12 @@ def set_database_info
   print "What's your postgresql password? : "
   password = STDIN.gets.chomp
   print "Are you on windows?('yes' for true, anything else for false) : "
-  on_windows = STDIN.gets.chomp
+  on_windows? = STDIN.gets.chomp
 
-  if on_windows == "yes"
-    insert_into_file "config/database.yml",
-    "\n  host: localhost",
-    after: "adapter: postgresql"
+  if on_windows? == "yes"
+    gsub_file "config/database.yml",
+    /  #host: localhost/,
+    "  host: localhost"
   end
 
   insert_into_file "config/database.yml",

@@ -25,6 +25,30 @@ def add_template_repository_to_source_path
   end
 end
 
+def set_database_info
+  print "What's your postgresql database user name? : "
+  username = STDIN.gets.chomp
+  print "What's your postgresql password? : "
+  password = STDIN.gets.chomp
+  print "Are you on windows?('yes' for true, anything else for false) : "
+  on_windows = STDIN.gets.chomp
+
+  if on_windows == "yes"
+    insert_into_file "config/database.yml",
+    "\n  host: localhost",
+    after: "adapter: postgresql"
+  end
+
+  insert_into_file "config/database.yml",
+  "\n  password: #{password}",
+  after: "adapter: postgresql"
+  
+  insert_into_file "config/database.yml",
+  "\n  username: #{username}",
+  after: "adapter: postgresql"
+
+end
+
 def add_gems
   gem 'administrate', '~> 0.8.1'
   gem 'data-confirm-modal', '~> 1.6.2'
@@ -193,6 +217,7 @@ add_gems
 
 after_bundle do
   set_application_name
+  set_database_info
   stop_spring
   add_users
   add_bootstrap

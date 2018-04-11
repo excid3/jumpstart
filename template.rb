@@ -182,6 +182,10 @@ def add_whenever
   run "wheneverize ."
 end
 
+def stop_spring
+  run "spring stop"
+end
+
 # Main setup
 add_template_repository_to_source_path
 
@@ -189,6 +193,7 @@ add_gems
 
 after_bundle do
   set_application_name
+  stop_spring
   add_users
   add_bootstrap
   add_sidekiq

@@ -1,23 +1,57 @@
-def source_paths
-  [File.expand_path(File.dirname(__FILE__))]
+require "fileutils"
+require "shellwords"
+
+# Copied from: https://github.com/mattbrictson/rails-template
+# Add this template directory to source_paths so that Thor actions like
+# copy_file and template resolve against our source files. If this file was
+# invoked remotely via HTTP, that means the files are not present locally.
+# In that case, use `git clone` to download them to a local temporary dir.
+def add_template_repository_to_source_path
+  if __FILE__ =~ %r{\Ahttps?://}
+    require "tmpdir"
+    source_paths.unshift(tempdir = Dir.mktmpdir("jumpstart-"))
+    at_exit { FileUtils.remove_entry(tempdir) }
+    git clone: [
+      "--quiet",
+      "https://github.com/excid3/jumpstart.git",
+      tempdir
+    ].map(&:shellescape).join(" ")
+
+    if (branch = __FILE__[%r{jumpstart/(.+)/template.rb}, 1])
+      Dir.chdir(tempdir) { git checkout: branch }
+    end
+  else
+    source_paths.unshift(File.dirname(__FILE__))
+  end
 end
 
 def add_gems
   gem 'administrate', '~> 0.8.1'
-  gem 'devise', '~> 4.3.0'
+  gem 'data-confirm-modal', '~> 1.6.2'
+  gem 'devise', '~> 4.4.3'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 0.6.0'
   gem 'font-awesome-sass', '~> 4.7'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.beta'
-  gem 'webpacker', '~> 3.0'
+  gem 'mini_magick', '~> 4.8'
+  gem 'webpacker', '~> 3.4'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'
   gem 'omniauth-facebook', '~> 4.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
   gem 'whenever', require: false
+  gem 'friendly_id', '~> 5.1.0'
+end
+
+def set_application_name
+  # Add Application Name to Config
+  environment "config.application_name = Rails.application.class.parent_name"
+
+  # Announce the user where he can change the application name in the future.
+  puts "You can change application name inside: ./config/application.rb"
 end
 
 def add_users
@@ -64,7 +98,7 @@ def add_bootstrap
   # Add Bootstrap JS
   insert_into_file(
     "app/assets/javascripts/application.js",
-    "\n//= require jquery\n//= require popper\n//= require bootstrap",
+    "\n//= require jquery\n//= require popper\n//= require bootstrap\n//= require data-confirm-modal",
     after: "//= require rails-ujs"
   )
 end
@@ -72,6 +106,7 @@ end
 def copy_templates
   directory "app", force: true
   directory "config", force: true
+  directory "lib", force: true
 
   route "get '/terms', to: 'home#terms'"
   route "get '/privacy', to: 'home#privacy'"
@@ -148,10 +183,22 @@ def add_whenever
   run "wheneverize ."
 end
 
+def add_friendly_id
+  generate "friendly_id"
+end
+
+def stop_spring
+  run "spring stop"
+end
+
 # Main setup
+add_template_repository_to_source_path
+
 add_gems
 
 after_bundle do
+  set_application_name
+  stop_spring
   add_users
   add_bootstrap
   add_sidekiq
@@ -160,7 +207,8 @@ after_bundle do
   add_announcements
   add_notifications
   add_multiple_authentication
-
+  add_friendly_id
+  
   copy_templates
 
   # Migrate

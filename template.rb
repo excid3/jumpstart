@@ -44,6 +44,7 @@ def add_gems
   gem 'omniauth-github', '~> 1.3'
   gem 'whenever', require: false
   gem 'friendly_id', '~> 5.1.0'
+  gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
 end
 
 def set_application_name
@@ -197,6 +198,10 @@ def stop_spring
   run "spring stop"
 end
 
+def add_sitemap
+  rails_command "sitemap:install"
+end
+
 # Main setup
 add_template_repository_to_source_path
 
@@ -225,6 +230,8 @@ after_bundle do
   add_administrate
 
   add_whenever
+
+  add_sitemap
 
 
   git :init

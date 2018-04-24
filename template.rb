@@ -185,6 +185,12 @@ end
 
 def add_friendly_id
   generate "friendly_id"
+
+  insert_into_file(
+    Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
+    "[5.2]",
+    after: "ActiveRecord::Migration"
+  )
 end
 
 def stop_spring

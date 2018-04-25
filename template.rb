@@ -26,7 +26,7 @@ def add_template_repository_to_source_path
 end
 
 def add_gems
-  gem 'administrate', '~> 0.8.1'
+  gem 'administrate', '~> 0.10.0'
   gem 'data-confirm-modal', '~> 1.6.2'
   gem 'devise', '~> 4.4.3'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'

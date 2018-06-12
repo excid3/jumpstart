@@ -1,9 +1,32 @@
-def source_paths
-  [File.expand_path(File.dirname(__FILE__))]
+require "fileutils"
+require "shellwords"
+
+# Copied from: https://github.com/mattbrictson/rails-template
+# Add this template directory to source_paths so that Thor actions like
+# copy_file and template resolve against our source files. If this file was
+# invoked remotely via HTTP, that means the files are not present locally.
+# In that case, use `git clone` to download them to a local temporary dir.
+def add_template_repository_to_source_path
+  if __FILE__ =~ %r{\Ahttps?://}
+    require "tmpdir"
+    source_paths.unshift(tempdir = Dir.mktmpdir("jumpstart-"))
+    at_exit { FileUtils.remove_entry(tempdir) }
+    git clone: [
+      "--quiet",
+      "https://github.com/excid3/jumpstart.git",
+      tempdir
+    ].map(&:shellescape).join(" ")
+
+    if (branch = __FILE__[%r{jumpstart/(.+)/template.rb}, 1])
+      Dir.chdir(tempdir) { git checkout: branch }
+    end
+  else
+    source_paths.unshift(File.dirname(__FILE__))
+  end
 end
 
 def add_gems
-  gem 'administrate', '~> 0.8.1'
+  gem 'administrate', '~> 0.10.0'
   gem 'data-confirm-modal', '~> 1.6.2'
   gem 'devise', '~> 4.4.3'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
@@ -12,27 +35,24 @@ def add_gems
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'
   gem 'bootstrap', '~> 4.0.0.beta'
-  gem 'webpacker', '~> 3.0'
+  gem 'mini_magick', '~> 4.8'
+  gem 'webpacker', '~> 3.4'
   gem 'sidekiq', '~> 5.0'
   gem 'foreman', '~> 0.84.0'
   gem 'omniauth-facebook', '~> 4.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'omniauth-github', '~> 1.3'
   gem 'whenever', require: false
+  gem 'friendly_id', '~> 5.1.0'
+  gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
 end
 
 def set_application_name
-  # Ask user for application name
-  application_name = ask("What is the name of your application? Default: Jumpstart")
-
-  # Checks if application name is empty and add default Jumpstart.
-  application_name = application_name.present? ? application_name : "Jumpstart"
-
   # Add Application Name to Config
-  environment "config.application_name = '#{application_name}'"
+  environment "config.application_name = Rails.application.class.parent_name"
 
   # Announce the user where he can change the application name in the future.
-  puts "Your application name is #{application_name}. You can change this later on: ./config/application.rb"
+  puts "You can change application name inside: ./config/application.rb"
 end
 
 def add_users
@@ -130,6 +150,14 @@ def add_administrate
     /announcement_type: Field::String/,
     "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
 
+  gsub_file "app/dashboards/user_dashboard.rb",
+    /email: Field::String/,
+    "email: Field::String,\n\t\tpassword: Field::String"
+
+  gsub_file "app/dashboards/user_dashboard.rb",
+    /FORM_ATTRIBUTES = \[/,
+    "FORM_ATTRIBUTES = [\n\t\t:password,"
+
   gsub_file "app/controllers/admin/application_controller.rb",
     /# TODO Add authentication logic here\./,
     "redirect_to '/', alert: 'Not authorized.' unless user_signed_in? && current_user.admin?"
@@ -164,11 +192,32 @@ def add_whenever
   run "wheneverize ."
 end
 
+def add_friendly_id
+  generate "friendly_id"
+
+  insert_into_file(
+    Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
+    "[5.2]",
+    after: "ActiveRecord::Migration"
+  )
+end
+
+def stop_spring
+  run "spring stop"
+end
+
+def add_sitemap
+  rails_command "sitemap:install"
+end
+
 # Main setup
+add_template_repository_to_source_path
+
 add_gems
 
 after_bundle do
   set_application_name
+  stop_spring
   add_users
   add_bootstrap
   add_sidekiq
@@ -177,7 +226,8 @@ after_bundle do
   add_announcements
   add_notifications
   add_multiple_authentication
-
+  add_friendly_id
+  
   copy_templates
 
   # Migrate
@@ -188,6 +238,8 @@ after_bundle do
   add_administrate
 
   add_whenever
+
+  add_sitemap
 
 
   git :init

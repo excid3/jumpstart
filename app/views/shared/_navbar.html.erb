@@ -1,7 +1,7 @@
 <% if user_masquerade? %>
   <div class="alert alert-warning text-center">
     You're logged in as <b><%= current_user.name %> (<%= current_user.email %>)</b>
-    <%= link_to back_masquerade_path(current_user) do %><%= icon("times") %> Logout <% end %>
+    <%= link_to back_masquerade_path(current_user) do %><%= icon("fas", "times") %> Logout <% end %>
   </div>
 <% end %>
 

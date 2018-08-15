@@ -8,6 +8,15 @@ It's like Laravel Spark, for Rails. All your Rails apps should start off with a 
 
 Jumpstart is a Rails template, so you pass it in as an option when creating a new app.
 
+#### Requirements
+
+You'll need the following installed to run the template successfully:
+
+* Ruby 2.5+
+* bundler - `gem install bundler`
+* rails - `gem install rails`
+* Yarn - `brew install yarn` or [Install Yarn](https://yarnpkg.com/en/docs/install)
+
 #### Creating a new app
 
 ```bash

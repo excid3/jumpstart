@@ -166,7 +166,7 @@ end
 
 def add_app_helpers_to_administrate
   environment do <<-RUBY
-    # Load App helpers into administrate
+    # Expose our application's helpers to Administrate
     config.to_prepare do
       Administrate::ApplicationController.helper #{@app_name.camelize}::Application.helpers
     end

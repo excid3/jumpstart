@@ -164,6 +164,16 @@ def add_administrate
     "redirect_to '/', alert: 'Not authorized.' unless user_signed_in? && current_user.admin?"
 end
 
+def add_app_helpers_to_administrate
+  environment do <<-RUBY
+    # Load App helpers into administrate
+    config.to_prepare do
+      Administrate::ApplicationController.helper #{@app_name.camelize}::Application.helpers
+    end
+  RUBY
+  end
+end
+
 def add_multiple_authentication
     insert_into_file "config/routes.rb",
     ', controllers: { omniauth_callbacks: "users/omniauth_callbacks" }',
@@ -237,6 +247,8 @@ after_bundle do
 
   # Migrations must be done before this
   add_administrate
+
+  add_app_helpers_to_administrate
 
   add_whenever
 

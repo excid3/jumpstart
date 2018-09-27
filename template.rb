@@ -153,7 +153,7 @@ def add_administrate
 
   gsub_file "app/dashboards/user_dashboard.rb",
     /email: Field::String/,
-    "email: Field::String,\n\t\tField::String.with_options(searchable: false)"
+    "email: Field::String,\n\t\tField::String.with_options(searchable: false),"
 
   gsub_file "app/dashboards/user_dashboard.rb",
     /FORM_ATTRIBUTES = \[/,

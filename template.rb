@@ -184,16 +184,16 @@ def add_multiple_authentication
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
     template = """
-  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present?
-    config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts'
+  if facebook = Rails.application.credentials[Rails.env.to_sym][:facebook]
+    config.omniauth :facebook, facebook[:app_id], facebook[:app_secret], scope: 'email,user_posts'
   end
 
-  if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present?
-    config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret
+  if twitter = Rails.application.credentials[Rails.env.to_sym][:twitter]
+    config.omniauth :twitter, twitter[:app_id], twitter[:app_secret]
   end
 
-  if Rails.application.secrets.github_app_id.present? && Rails.application.secrets.github_app_secret.present?
-    config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret
+  if github = Rails.application.credentials[Rails.env.to_sym][:github]
+    config.omniauth :github, github[:app_id], github[:app_secret}
   end
     """.strip
 

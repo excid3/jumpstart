@@ -45,10 +45,16 @@ development:
   github:
     app_id: something
     app_secret: something
+    options:
+      scope: 'user:email'
+      whatever: true
 production:
   github:
     app_id: something
     app_secret: something
+    options:
+      scope: 'user:email'
+      whatever: true
 ```
 
 With the environment, the service and the app_id/app_secret. If this is done correctly, you should see login links

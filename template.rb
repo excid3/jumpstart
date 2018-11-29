@@ -142,7 +142,7 @@ def add_announcements
 end
 
 def add_notifications
-  generate "model Notification recipient_id:integer actor_id:integer read_at:datetime action:string notifiable_id:integer notifiable_type:string"
+  generate "model Notification recipient_id:bigint actor_id:bigint read_at:datetime action:string notifiable_id:bigint notifiable_type:string"
   route "resources :notifications, only: [:index]"
 end
 

@@ -29,6 +29,37 @@ Or if you have downloaded this repo, you can reference template.rb locally:
 rails new myapp -d postgresql -m template.rb
 ```
 
+#### Authenticate with social networks
+
+We use the encrypted Rails Credentials for app_id and app_secrets when it comes to omniauth authentication. Edit them as so:
+
+```
+EDITOR=vim rails credentials:edit
+```
+
+Make sure your file follow this structure:
+
+```
+secret_key_base: [your-key]
+development:
+  github:
+    app_id: something
+    app_secret: something
+    options:
+      scope: 'user:email'
+      whatever: true
+production:
+  github:
+    app_id: something
+    app_secret: something
+    options:
+      scope: 'user:email'
+      whatever: true
+```
+
+With the environment, the service and the app_id/app_secret. If this is done correctly, you should see login links
+for the services you have added to the encrypted credentials using `EDITOR=vim rails credentials:edit`
+
 #### Cleaning up
 
 ```bash

@@ -184,17 +184,12 @@ def add_multiple_authentication
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
     template = """
-  if Rails.application.secrets.facebook_app_id.present? && Rails.application.secrets.facebook_app_secret.present?
-    config.omniauth :facebook, Rails.application.secrets.facebook_app_id, Rails.application.secrets.facebook_app_secret, scope: 'email,user_posts'
-  end
-
-  if Rails.application.secrets.twitter_app_id.present? && Rails.application.secrets.twitter_app_secret.present?
-    config.omniauth :twitter, Rails.application.secrets.twitter_app_id, Rails.application.secrets.twitter_app_secret
-  end
-
-  if Rails.application.secrets.github_app_id.present? && Rails.application.secrets.github_app_secret.present?
-    config.omniauth :github, Rails.application.secrets.github_app_id, Rails.application.secrets.github_app_secret
-  end
+    env_creds = Rails.application.credentials[Rails.env.to_sym]
+    Service::PROVIDERS.each do |provider|
+      if options = env_creds[provider]
+        confg.omniauth provider, options[:app_id], options[:app_secret], options.fetch(:options, {})
+      end
+    end
     """.strip
 
     insert_into_file "config/initializers/devise.rb", "  " + template + "\n\n",

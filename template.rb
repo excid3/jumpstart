@@ -184,7 +184,7 @@ def add_multiple_authentication
     generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
     template = """
-    env_creds = Rails.application.credentials[Rails.env.to_sym]
+    env_creds = Rails.application.credentials[Rails.env.to_sym] || {}
     Service::PROVIDERS.each do |provider|
       if options = env_creds[provider]
         confg.omniauth provider, options[:app_id], options[:app_secret], options.fetch(:options, {})

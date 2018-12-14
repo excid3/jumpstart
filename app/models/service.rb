@@ -1,9 +1,7 @@
 class Service < ApplicationRecord
   belongs_to :user
 
-  PROVIDERS = %w{ facebook twitter github }
-
-  PROVIDERS.each do |provider|
+  Devise.omniauth_configs.keys.each do |provider|
     scope provider, ->{ where(provider: provider) }
   end
 

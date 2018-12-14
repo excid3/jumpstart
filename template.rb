@@ -185,7 +185,7 @@ def add_multiple_authentication
 
     template = """
     env_creds = Rails.application.credentials[Rails.env.to_sym] || {}
-    Service::PROVIDERS.each do |provider|
+    %w{ facebook twitter github }.each do |provider|
       if options = env_creds[provider]
         confg.omniauth provider, options[:app_id], options[:app_secret], options.fetch(:options, {})
       end

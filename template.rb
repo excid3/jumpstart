@@ -27,12 +27,12 @@ end
 
 def add_gems
   gem 'administrate', '~> 0.10.0'
-  gem 'bootstrap', '~> 4.1', '>= 4.1.1'
+  gem 'bootstrap', '~> 4.2', '>= 4.2.1'
   gem 'data-confirm-modal', '~> 1.6', '>= 1.6.2'
   gem 'devise', '~> 4.4', '>= 4.4.3'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 0.6.2'
-  gem 'font-awesome-sass', '~> 5.5', '>= 5.5.0.1'  
+  gem 'font-awesome-sass', '~> 5.5', '>= 5.5.0.1'
   gem 'foreman', '~> 0.84.0'
   gem 'friendly_id', '~> 5.2', '>= 5.2.4'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'

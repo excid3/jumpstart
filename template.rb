@@ -45,8 +45,8 @@ def add_gems
   gem 'omniauth-twitter', '~> 1.4'
   gem 'sidekiq', '~> 5.2', '>= 5.2.5'
   gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
-  gem 'webpacker', '~> 3.5', '>= 3.5.3'
   gem 'whenever', require: false
+  gem 'webpacker', '~> 4.0.0.rc.7'
 end
 
 def set_application_name

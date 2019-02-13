@@ -39,7 +39,7 @@ EDITOR=vim rails credentials:edit
 
 Make sure your file follow this structure:
 
-```
+```yml
 secret_key_base: [your-key]
 development:
   github:

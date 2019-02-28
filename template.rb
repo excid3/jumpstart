@@ -25,6 +25,10 @@ def add_template_repository_to_source_path
   end
 end
 
+def rails_version
+  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
+end
+
 def add_gems
   gem 'administrate', '~> 0.11.0'
   gem 'bootstrap', '~> 4.3', '>= 4.3.1'
@@ -46,7 +50,11 @@ def add_gems
   gem 'sidekiq', '~> 5.2', '>= 5.2.5'
   gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
   gem 'whenever', require: false
-  gem 'webpacker', '~> 4.0.0.rc.7'
+
+  if Gem::Requirement.new("< 6.0.0.beta1").satisfied_by? rails_version
+    # Webpacker comes by default in Rails 6, so we can skip adding webpacker
+    gem 'webpacker', '~> 4.0.0.rc.7'
+  end
 end
 
 def set_application_name
@@ -82,10 +90,7 @@ def add_users
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  requirement = Gem::Requirement.new("> 5.2")
-  rails_version = Gem::Version.new(Rails::VERSION::STRING)
-
-  if requirement.satisfied_by? rails_version
+  if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
     gsub_file "config/initializers/devise.rb",
       /  # config.secret_key = .+/,
       "  config.secret_key = Rails.application.credentials.secret_key_base"

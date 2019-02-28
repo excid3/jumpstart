@@ -37,7 +37,7 @@ def add_gems
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 0.6.2'
   gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
-  gem 'foreman', '~> 0.85.0'
+  gem 'foreman', github: 'bitaculous/foreman' # '~> 0.85.0'
   gem 'friendly_id', '~> 5.2', '>= 5.2.5'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'jquery-rails', '~> 4.3.1'

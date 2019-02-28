@@ -2,7 +2,7 @@
 
 It's like Laravel Spark, for Rails. All your Rails apps should start off with a bunch of great defaults.
 
-**Note:** Requires Rails 5.2
+**Note:** Requires Rails 5.2 or higher
 
 ## Getting Started
 

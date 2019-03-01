@@ -29,19 +29,23 @@ def rails_version
   @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
 end
 
+def rails_5?
+  Gem::Requirement.new(">= 5.2.0", "< 6.0.0.beta1").satisfied_by? rails_version
+end
+
+def rails_6?
+  Gem::Requirement.new(">= 6.0.0.beta1", "< 7").satisfied_by? rails_version
+end
+
 def add_gems
-  gem 'administrate', '~> 0.11.0'
+  gem 'administrate', github: "excid3/administrate", branch: "zeitwerk"
   gem 'bootstrap', '~> 4.3', '>= 4.3.1'
-  gem 'data-confirm-modal', '~> 1.6', '>= 1.6.2'
   gem 'devise', '~> 4.6', '>= 4.6.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 0.6.2'
   gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
-  gem 'foreman', github: 'bitaculous/foreman' # '~> 0.85.0'
   gem 'friendly_id', '~> 5.2', '>= 5.2.5'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
-  gem 'jquery-rails', '~> 4.3.1'
-  gem 'local_time', '~> 2.1'
   gem 'mini_magick', '~> 4.9', '>= 4.9.2'
   gem 'name_of_person', '~> 1.1'
   gem 'omniauth-facebook', '~> 5.0'
@@ -51,8 +55,7 @@ def add_gems
   gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
   gem 'whenever', require: false
 
-  if Gem::Requirement.new("< 6.0.0.beta1").satisfied_by? rails_version
-    # Webpacker comes by default in Rails 6, so we can skip adding webpacker
+  if rails_5?
     gem 'webpacker', '~> 4.0.0.rc.7'
   end
 end
@@ -100,29 +103,61 @@ def add_users
   inject_into_file("app/models/user.rb", "omniauthable, :masqueradable, :", after: "devise :")
 end
 
-def add_bootstrap
-  # Remove Application CSS
-  run "rm app/assets/stylesheets/application.css"
+def add_webpack
+  # Rails 6+ comes with webpacker by default, so we can skip this step
+  return if rails_6?
 
-  # Add Bootstrap JS
-  insert_into_file(
-    "app/assets/javascripts/application.js",
-    "\n//= require jquery\n//= require popper\n//= require bootstrap\n//= require data-confirm-modal\n//= require local-time",
-    after: "//= require rails-ujs"
-  )
+  # Our application layout already includes the javascript_pack_tag,
+  # so we don't need to inject it
+  rails_command 'webpacker:install'
+end
+
+def add_javascript
+  run "yarn add expose-loader jquery popper.js bootstrap data-confirm-modal local-time"
+
+  content = <<-JS
+    require("local-time").start()
+
+    window.Rails = Rails
+
+    import 'bootstrap'
+    import 'data-confirm-modal'
+
+    $(document).on("turbolinks:load", () => {
+      $('[data-toggle="tooltip"]').tooltip()
+      $('[data-toggle="popover"]').popover()
+    })
+  JS
+
+  append_to_file 'app/javascript/packs/application.js', content
+
+  content = <<-JS
+    const webpack = require('webpack')
+    environment.plugins.append('Provide', new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      Rails: '@rails/ujs'
+    }))
+  JS
+
+  insert_into_file 'config/webpack/environment.js', content + "\n\n", before: "module.exports = environment"
 end
 
 def copy_templates
+  # Remove default application CSS
+  # Our stylesheets get copied over from the app folder
+  run "rm app/assets/stylesheets/application.css"
+
+  copy_file "Procfile"
+  copy_file "Procfile.dev"
+  copy_file ".foreman"
+
   directory "app", force: true
   directory "config", force: true
   directory "lib", force: true
 
   route "get '/terms', to: 'home#terms'"
   route "get '/privacy', to: 'home#privacy'"
-end
-
-def add_webpack
-  rails_command 'webpacker:install'
 end
 
 def add_sidekiq
@@ -132,13 +167,12 @@ def add_sidekiq
     "require 'sidekiq/web'\n\n",
     before: "Rails.application.routes.draw do"
 
-  insert_into_file "config/routes.rb",
-    "  authenticate :user, lambda { |u| u.admin? } do\n    mount Sidekiq::Web => '/sidekiq'\n  end\n\n",
-    after: "Rails.application.routes.draw do\n"
-end
-
-def add_foreman
-  copy_file "Procfile"
+  content = <<-RUBY
+    authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => '/sidekiq'
+    end
+  RUBY
+  insert_into_file "config/routes.rb", "#{content}\n\n", after: "Rails.application.routes.draw do\n"
 end
 
 def add_announcements
@@ -169,9 +203,7 @@ def add_administrate
   gsub_file "app/controllers/admin/application_controller.rb",
     /# TODO Add authentication logic here\./,
     "redirect_to '/', alert: 'Not authorized.' unless user_signed_in? && current_user.admin?"
-end
 
-def add_app_helpers_to_administrate
   environment do <<-RUBY
     # Expose our application's helpers to Administrate
     config.to_prepare do
@@ -232,16 +264,17 @@ after_bundle do
   set_application_name
   stop_spring
   add_users
-  add_bootstrap
-  add_sidekiq
-  add_foreman
   add_webpack
+  add_javascript
   add_announcements
   add_notifications
   add_multiple_authentication
+  add_sidekiq
   add_friendly_id
 
   copy_templates
+  add_whenever
+  add_sitemap
 
   # Migrate
   rails_command "db:create"
@@ -250,14 +283,15 @@ after_bundle do
   # Migrations must be done before this
   add_administrate
 
-  add_app_helpers_to_administrate
-
-  add_whenever
-
-  add_sitemap
-
-
+  # Commit everything to git
   git :init
   git add: "."
   git commit: %Q{ -m 'Initial commit' }
+
+  say
+  say "Jumpstart app successfully created! 🙌", :blue
+  say
+  say "To get started with your new app:", :green
+  say "`cd #{app_name}` - Switch to your new app's directory."
+  say "`foreman start` - Run Rails, sidekiq, and webpack-dev-server."
 end

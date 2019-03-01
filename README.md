@@ -16,6 +16,8 @@ You'll need the following installed to run the template successfully:
 * bundler - `gem install bundler`
 * rails - `gem install rails`
 * Yarn - `brew install yarn` or [Install Yarn](https://yarnpkg.com/en/docs/install)
+* Foreman (optional) - `gem install foreman` - helps run all your
+  processes in development
 
 #### Creating a new app
 
@@ -28,6 +30,12 @@ Or if you have downloaded this repo, you can reference template.rb locally:
 ```bash
 rails new myapp -d postgresql -m template.rb
 ```
+
+To run your app, use `foreman start`.
+
+This will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes. You can also run them in separate terminals manually if you prefer.
+
+A separate `Procfile` is generated for deploying to production.
 
 #### Authenticate with social networks
 

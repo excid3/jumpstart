@@ -56,6 +56,7 @@ def add_gems
   gem 'whenever', require: false
 
   if rails_5?
+    gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
     gem 'webpacker', '~> 4.0.0.rc.7'
   end
 end
@@ -115,39 +116,23 @@ end
 def add_javascript
   run "yarn add expose-loader jquery popper.js bootstrap data-confirm-modal local-time"
 
-  content = <<-JS
-    require("local-time").start()
-
-    window.Rails = Rails
-
-    import 'bootstrap'
-    import 'data-confirm-modal'
-
-    $(document).on("turbolinks:load", () => {
-      $('[data-toggle="tooltip"]').tooltip()
-      $('[data-toggle="popover"]').popover()
-    })
-  JS
-
-  append_to_file 'app/javascript/packs/application.js', content
+  if rails_5?
+    run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
+  end
 
   content = <<-JS
-    const webpack = require('webpack')
-    environment.plugins.append('Provide', new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      Rails: '@rails/ujs'
-    }))
+const webpack = require('webpack')
+environment.plugins.append('Provide', new webpack.ProvidePlugin({
+  $: 'jquery',
+  jQuery: 'jquery',
+  Rails: '@rails/ujs'
+}))
   JS
 
-  insert_into_file 'config/webpack/environment.js', content + "\n\n", before: "module.exports = environment"
+  insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
 end
 
 def copy_templates
-  # Remove default application CSS
-  # Our stylesheets get copied over from the app folder
-  run "rm app/assets/stylesheets/application.css"
-
   copy_file "Procfile"
   copy_file "Procfile.dev"
   copy_file ".foreman"
@@ -292,6 +277,6 @@ after_bundle do
   say "Jumpstart app successfully created! 🙌", :blue
   say
   say "To get started with your new app:", :green
-  say "`cd #{app_name}` - Switch to your new app's directory."
-  say "`foreman start` - Run Rails, sidekiq, and webpack-dev-server."
+  say "cd #{app_name} - Switch to your new app's directory."
+  say "foreman start - Run Rails, sidekiq, and webpack-dev-server."
 end

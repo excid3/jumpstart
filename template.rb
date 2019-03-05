@@ -133,7 +133,7 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
 end
 
 def copy_templates
-  remove_file "app/stylesheets/application.css"
+  remove_file "app/assets/stylesheets/application.css"
 
   copy_file "Procfile"
   copy_file "Procfile.dev"

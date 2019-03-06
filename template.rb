@@ -57,7 +57,7 @@ def add_gems
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-    gem 'webpacker', '~> 4.0.0.rc.7'
+    gem 'webpacker', '~> 4.0.1'
   end
 end
 
@@ -276,7 +276,7 @@ after_bundle do
   git commit: %Q{ -m 'Initial commit' }
 
   say
-  say "Jumpstart app successfully created! 🙌", :blue
+  say "Jumpstart app successfully created!", :blue
   say
   say "To get started with your new app:", :green
   say "cd #{app_name} - Switch to your new app's directory."

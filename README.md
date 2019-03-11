@@ -1,8 +1,12 @@
-# Rails Jumpstart
+# Jumpstart Rails Template
 
 It's like Laravel Spark, for Rails. All your Rails apps should start off with a bunch of great defaults.
 
 **Note:** Requires Rails 5.2 or higher
+
+Want to see how it works? Check out [the Jumpstart walkthrough video](https://www.youtube.com/watch?v=ssOZpISfIfI):
+
+[![Jumpstart Ruby on Rails Template Walkthrough](https://i.imgur.com/pZDPbc7l.png)](https://www.youtube.com/watch?v=ssOZpISfIfI)
 
 ## Getting Started
 
@@ -12,7 +16,8 @@ Jumpstart is a Rails template, so you pass it in as an option when creating a ne
 
 You'll need the following installed to run the template successfully:
 
-* Ruby 2.5+
+* Ruby 2.5 or higher
+* Redis - For ActionCable support
 * bundler - `gem install bundler`
 * rails - `gem install rails`
 * Yarn - `brew install yarn` or [Install Yarn](https://yarnpkg.com/en/docs/install)

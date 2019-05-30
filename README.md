@@ -1,6 +1,8 @@
+👉 We've also built [Jumpstart Pro](https://jumpstartrails.com) which is a version of Jumpstart that includes payments with Stripe & Braintree, team accounts, TailwindCSS, and much more.
+
 # Jumpstart Rails Template
 
-It's like Laravel Spark, for Rails. All your Rails apps should start off with a bunch of great defaults.
+All your Rails apps should start off with a bunch of great defaults. It's like Laravel Spark, for Rails.
 
 **Note:** Requires Rails 5.2 or higher
 

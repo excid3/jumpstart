@@ -29,7 +29,7 @@ You'll need the following installed to run the template successfully:
 #### Creating a new app
 
 ```bash
-rails new myapp -d postgresql -m https://raw.githubusercontent.com/captproton/jumpstart/master/template.rb
+rails new myapp -d postgresql -m https://raw.githubusercontent.com/SecondStarLabs/jumpstart/master/template.rb
 ```
 
 Or if you have downloaded this repo, you can reference template.rb locally:

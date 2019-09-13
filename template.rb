@@ -38,7 +38,7 @@ def rails_6?
 end
 
 def add_gems
-  gem 'administrate', github: "thoughtbot/administrate"
+  gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
   gem 'bootstrap', '~> 4.3', '>= 4.3.1'
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
@@ -179,9 +179,9 @@ end
 def add_administrate
   generate "administrate:install"
 
-  #gsub_file "app/dashboards/announcement_dashboard.rb",
-    #/announcement_type: Field::String/,
-    #"announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
+  gsub_file "app/dashboards/announcement_dashboard.rb",
+    /announcement_type: Field::String/,
+    "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
 
   gsub_file "app/dashboards/user_dashboard.rb",
     /email: Field::String/,

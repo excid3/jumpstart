@@ -42,7 +42,7 @@ def add_gems
   gem 'bootstrap', '~> 4.3', '>= 4.3.1'
   gem 'devise', '~> 4.7', '>= 4.7.0'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
-  gem 'devise_masquerade', '~> 0.6.2'
+  gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
   gem 'friendly_id', '~> 5.2', '>= 5.2.5'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
@@ -51,7 +51,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 5.0'
   gem 'omniauth-github', '~> 1.3'
   gem 'omniauth-twitter', '~> 1.4'
-  gem 'sidekiq', '~> 5.2', '>= 5.2.5'
+  gem 'sidekiq', '~> 6.0', '>= 6.0.3'
   gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
   gem 'whenever', require: false
 

@@ -179,6 +179,10 @@ end
 def add_administrate
   generate "administrate:install"
 
+  append_to_file "app/assets/config/manifest.js" do
+    "//= link administrate/application.css\n//= link administrate/application.js"
+  end
+
   gsub_file "app/dashboards/announcement_dashboard.rb",
     /announcement_type: Field::String/,
     "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"

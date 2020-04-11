@@ -4,8 +4,6 @@
 
 All your Rails apps should start off with a bunch of great defaults. It's like Laravel Spark, for Rails.
 
-**Note:** Requires Rails 5.2 or higher
-
 Want to see how it works? Check out [the Jumpstart walkthrough video](https://www.youtube.com/watch?v=ssOZpISfIfI):
 
 [![Jumpstart Ruby on Rails Template Walkthrough](https://i.imgur.com/pZDPbc7l.png)](https://www.youtube.com/watch?v=ssOZpISfIfI)
@@ -38,11 +36,15 @@ Or if you have downloaded this repo, you can reference template.rb locally:
 rails new myapp -d postgresql -m template.rb
 ```
 
-To run your app, use `foreman start`.
+❓Having trouble? Try adding `DISABLE_SPRING=1` before `rails new`. Spring will get confused if you create an app with the same name twice.
 
-This will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes. You can also run them in separate terminals manually if you prefer.
+#### Running your app
 
-A separate `Procfile` is generated for deploying to production.
+To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes. 
+
+You can also run them in separate terminals manually if you prefer.
+
+A separate `Procfile` is generated for deploying to production on Heroku.
 
 #### Authenticate with social networks
 

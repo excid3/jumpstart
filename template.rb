@@ -250,15 +250,6 @@ def add_sitemap
   rails_command "sitemap:install"
 end
 
-def add_active_storage
-  environment "config.active_storage.service = :local", env: "development"
-  environment "config.active_storage.service = :test", env: "test"
-end
-
-def add_avatar
-  generate "model User avatar:file"
-end
-
 # Main setup
 add_template_repository_to_source_path
 
@@ -267,9 +258,7 @@ add_gems
 after_bundle do
   set_application_name
   stop_spring
-  add_active_storage
   add_users
-  add_avatar
   add_webpack
   add_javascript
   add_announcements

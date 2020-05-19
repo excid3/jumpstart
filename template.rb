@@ -273,6 +273,7 @@ after_bundle do
 
   # Migrate
   rails_command "db:create"
+  rails_command "active_storage:install"
   rails_command "db:migrate"
 
   # Migrations must be done before this

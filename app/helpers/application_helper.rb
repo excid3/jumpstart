@@ -8,10 +8,10 @@ module ApplicationHelper
     }.stringify_keys[flash_type.to_s] || flash_type.to_s
   end
   
-  def avatar_path(object, options = {size: 180, default: "mp", base: "https://secure.gravatar.com/avatar"})
-    size = options[:size]
-    default_image = options[:default]
-    base_url = options[:base]
+  def avatar_path(object, options = {})
+    size = options[:size] || 180
+    default_image = options[:default] || "mp"
+    base_url =  "https://secure.gravatar.com/avatar"
     base_url_params = "?s=#{size}&d=#{default_image}"
     
     if object.respond_to?(:avatar) && object.avatar.attached? && object.avatar.variable?

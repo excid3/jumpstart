@@ -13,8 +13,10 @@ window.Rails = Rails
 
 import 'bootstrap'
 import 'data-confirm-modal'
+import bsCustomFileInput from 'bs-custom-file-input'
 
 $(document).on("turbolinks:load", () => {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="popover"]').popover()
+  bsCustomFileInput.init()
 })

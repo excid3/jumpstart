@@ -118,7 +118,7 @@ def add_webpack
 end
 
 def add_javascript
-  run "yarn add expose-loader jquery popper.js bootstrap data-confirm-modal local-time bs-custom-file-input"
+  run "yarn add expose-loader jquery popper.js bootstrap data-confirm-modal local-time"
 
   if rails_5?
     run "yarn add turbolinks @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"

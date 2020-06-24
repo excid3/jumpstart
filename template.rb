@@ -45,7 +45,6 @@ def add_gems
   gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
   gem 'friendly_id', '~> 5.2', '>= 5.2.5'
-  gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'mini_magick', '~> 4.9', '>= 4.9.2'
   gem 'name_of_person', '~> 1.1'
   gem 'omniauth-facebook', '~> 5.0'
@@ -54,6 +53,7 @@ def add_gems
   gem 'sidekiq', '~> 6.0', '>= 6.0.3'
   gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
   gem 'whenever', require: false
+  gem 'image_processing'
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
@@ -273,6 +273,7 @@ after_bundle do
 
   # Migrate
   rails_command "db:create"
+  rails_command "active_storage:install"
   rails_command "db:migrate"
 
   # Migrations must be done before this

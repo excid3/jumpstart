@@ -13,9 +13,9 @@
         <%= f.email_field :email, class: 'form-control', placeholder: 'Email Address' %>
       </div>
 
-      <div class="custom-file">
-        <%= f.file_field :avatar, accept:'image/*', class: 'custom-file-input' %>
-        <%= f.label :avatar, class: 'custom-file-label'%>
+      <div class="form-group">
+        <%= f.label :avatar %>
+        <%= f.file_field :avatar, accept:'image/*' %>
       </div>
 
       <%= image_tag avatar_path(f.object), class: "rounded border shadow-sm d-block mx-auto my-3" %>      

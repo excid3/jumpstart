@@ -39,25 +39,25 @@ end
 
 def add_gems
   gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
-  gem 'bootstrap', '~> 4.3', '>= 4.3.1'
+  gem 'bootstrap', '~> 4.5'
   gem 'devise', '~> 4.7', '>= 4.7.0'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 1.2'
-  gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
-  gem 'friendly_id', '~> 5.2', '>= 5.2.5'
+  gem 'font-awesome-sass', '~> 5.13'
+  gem 'friendly_id', '~> 5.3'
   gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
-  gem 'mini_magick', '~> 4.9', '>= 4.9.2'
+  gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
-  gem 'omniauth-facebook', '~> 5.0'
-  gem 'omniauth-github', '~> 1.3'
+  gem 'omniauth-facebook', '~> 6.0'
+  gem 'omniauth-github', '~> 1.4'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'sidekiq', '~> 6.0', '>= 6.0.3'
-  gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
+  gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
   gem 'whenever', require: false
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-    gem 'webpacker', '~> 4.0.1'
+    gem 'webpacker', '~> 5.1', '>= 5.1.1'
   end
 end
 

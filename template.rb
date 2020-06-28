@@ -280,9 +280,11 @@ after_bundle do
   add_administrate
 
   # Commit everything to git
-  git :init
-  git add: "."
-  git commit: %Q{ -m 'Initial commit' }
+  unless ENV["SKIP_GIT"]
+    git :init
+    git add: "."
+    git commit: %Q{ -m 'Initial commit' }
+  end
 
   say
   say "Jumpstart app successfully created!", :blue

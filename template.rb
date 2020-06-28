@@ -45,7 +45,6 @@ def add_gems
   gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.13'
   gem 'friendly_id', '~> 5.3'
-  gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
   gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
   gem 'omniauth-facebook', '~> 6.0'

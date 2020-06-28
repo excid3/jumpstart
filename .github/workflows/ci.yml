@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup Ruby 2.7
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
+      - name: Setup Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get -yqq install libsqlite3-dev
+          gem install rails
+
+      # Clean up git repo so the new rails template doesn't conflict
+      - name: Remove git repo
+        run: |
+          rm -rf .git
+
+      - name: Run tests
+        run: |
+          rake
+

@@ -54,6 +54,7 @@ def add_gems
   gem 'sidekiq', '~> 6.0', '>= 6.0.3'
   gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
   gem 'whenever', require: false
+  gem 'image_processing'
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
@@ -273,6 +274,7 @@ after_bundle do
 
   # Migrate
   rails_command "db:create"
+  rails_command "active_storage:install"
   rails_command "db:migrate"
 
   # Migrations must be done before this

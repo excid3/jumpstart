@@ -47,6 +47,7 @@ def add_gems
   gem 'friendly_id', '~> 5.3'
   gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
+  gem 'noticed', '~> 1.2'
   gem 'omniauth-facebook', '~> 6.0'
   gem 'omniauth-github', '~> 1.4'
   gem 'omniauth-twitter', '~> 1.4'
@@ -172,7 +173,7 @@ def add_announcements
 end
 
 def add_notifications
-  generate "model Notification recipient_id:bigint actor_id:bigint read_at:datetime action:string notifiable_id:bigint notifiable_type:string"
+  generate "noticed:model"
   route "resources :notifications, only: [:index]"
 end
 

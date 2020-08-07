@@ -6,6 +6,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_person_name
 
-  has_many :notifications, foreign_key: :recipient_id
+  has_many :notifications, as: :recipient
   has_many :services
 end

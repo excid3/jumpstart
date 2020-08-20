@@ -273,6 +273,8 @@ after_bundle do
   add_sitemap
 
   # Migrate
+  run "cat config/database.yml"
+  run "env"
   rails_command "db:create"
   rails_command "active_storage:install"
   rails_command "db:migrate"

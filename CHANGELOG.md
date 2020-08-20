@@ -1,3 +1,7 @@
+### 2020-08-20
+
+* Add tests for generating postgres and mysql apps
+
 ### 2020-08-07
 
 * Refactor notifications to use the [Noticed gem](https://github.com/excid3/noticed)

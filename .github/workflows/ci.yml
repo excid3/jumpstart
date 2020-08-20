@@ -10,6 +10,29 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: test_app_production
+          POSTGRES_USER: test_app
+          POSTGRES_PASSWORD: password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test_app_production
+          MYSQL_USER: test_app
+          MYSQL_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@master
 
@@ -34,6 +57,7 @@ jobs:
           rm -rf .git
 
       - name: Run tests
+        env:
+          TEST_APP_DATABASE_PASSWORD: password
         run: |
           rake
-

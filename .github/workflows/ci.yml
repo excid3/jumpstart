@@ -31,6 +31,8 @@ jobs:
           MYSQL_DATABASE: test_app_production
           MYSQL_USER: test_app
           MYSQL_PASSWORD: password
+        ports:
+          - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -48,7 +50,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get -yqq install libsqlite3-dev
+          sudo apt-get -yqq install libsqlite3-dev libpq-dev libmysqlclient-dev
           gem install rails
 
       # Clean up git repo so the new rails template doesn't conflict

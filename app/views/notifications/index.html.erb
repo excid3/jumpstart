@@ -2,6 +2,9 @@
 
 <ul>
   <% @notifications.each do |notification| %>
-    <li><%= render "notifications/#{notification.notifiable_type.underscore}/#{notification.action.underscore}", actor: notification.actor, notifiable: notification.notifiable  %></li>
+    <%# Customize your notification format here. We typically recommend a `message` and `url` method on the Notification classes. %>
+    <%#= link_to notification.message, notification.url %>
+
+    <li><%= notification.params %></li>
   <% end %>
 </ul>

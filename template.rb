@@ -39,25 +39,26 @@ end
 
 def add_gems
   gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
-  gem 'bootstrap', '~> 4.3', '>= 4.3.1'
+  gem 'bootstrap', '~> 4.5'
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
-  gem 'devise_masquerade', '~> 0.6.2'
-  gem 'font-awesome-sass', '~> 5.6', '>= 5.6.1'
-  gem 'friendly_id', '~> 5.2', '>= 5.2.5'
-  gem 'gravatar_image_tag', github: 'mdeering/gravatar_image_tag'
-  gem 'mini_magick', '~> 4.9', '>= 4.9.2'
+  gem 'devise_masquerade', '~> 1.2'
+  gem 'font-awesome-sass', '~> 5.13'
+  gem 'friendly_id', '~> 5.3'
+  gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
-  gem 'omniauth-facebook', '~> 5.0'
-  gem 'omniauth-github', '~> 1.3'
+  gem 'noticed', '~> 1.2'
+  gem 'omniauth-facebook', '~> 6.0'
+  gem 'omniauth-github', '~> 1.4'
   gem 'omniauth-twitter', '~> 1.4'
-  gem 'sidekiq', '~> 5.2', '>= 5.2.5'
-  gem 'sitemap_generator', '~> 6.0', '>= 6.0.1'
+  gem 'sidekiq', '~> 6.0', '>= 6.0.3'
+  gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
   gem 'whenever', require: false
+  gem 'image_processing'
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-    gem 'webpacker', '~> 4.0.1'
+    gem 'webpacker', '~> 5.1', '>= 5.1.1'
   end
 end
 
@@ -172,12 +173,16 @@ def add_announcements
 end
 
 def add_notifications
-  generate "model Notification recipient_id:bigint actor_id:bigint read_at:datetime action:string notifiable_id:bigint notifiable_type:string"
+  generate "noticed:model"
   route "resources :notifications, only: [:index]"
 end
 
 def add_administrate
   generate "administrate:install"
+
+  append_to_file "app/assets/config/manifest.js" do
+    "//= link administrate/application.css\n//= link administrate/application.js"
+  end
 
   gsub_file "app/dashboards/announcement_dashboard.rb",
     /announcement_type: Field::String/,
@@ -269,15 +274,18 @@ after_bundle do
 
   # Migrate
   rails_command "db:create"
+  rails_command "active_storage:install"
   rails_command "db:migrate"
 
   # Migrations must be done before this
   add_administrate
 
   # Commit everything to git
-  git :init
-  git add: "."
-  git commit: %Q{ -m 'Initial commit' }
+  unless ENV["SKIP_GIT"]
+    git :init
+    git add: "."
+    git commit: %Q{ -m 'Initial commit' }
+  end
 
   say
   say "Jumpstart app successfully created!", :blue

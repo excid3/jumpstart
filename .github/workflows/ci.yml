@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - master
+
+env:
+  TEST_APP_DATABASE_PASSWORD: password
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -59,7 +63,5 @@ jobs:
           rm -rf .git
 
       - name: Run tests
-        env:
-          TEST_APP_DATABASE_PASSWORD: password
         run: |
           rake

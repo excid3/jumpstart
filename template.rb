@@ -272,13 +272,7 @@ after_bundle do
   add_whenever
   add_sitemap
 
-  # Migrate
-  rails_command "db:create"
   rails_command "active_storage:install"
-  rails_command "db:migrate"
-
-  # Migrations must be done before this
-  add_administrate
 
   # Commit everything to git
   unless ENV["SKIP_GIT"]
@@ -291,6 +285,12 @@ after_bundle do
   say "Jumpstart app successfully created!", :blue
   say
   say "To get started with your new app:", :green
-  say "cd #{app_name} - Switch to your new app's directory."
-  say "foreman start - Run Rails, sidekiq, and webpack-dev-server."
+  say "  cd #{app_name}"
+  say
+  say "  # Update config/database.yml with your database credentials"
+  say
+  say "  rails db:create && rails db:migrate"
+  say "  rails g administrate:install # Generate admin dashboards"
+  say "  gem install foreman"
+  say "  foreman start # Run Rails, sidekiq, and webpack-dev-server"
 end

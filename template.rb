@@ -135,6 +135,11 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
   JS
 
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
+
+  append_to_file "app/assets/config/manifest.js", <<-RUBY
+//= link administrate/application.css
+//= link administrate/application.js
+  RUBY
 end
 
 def copy_templates

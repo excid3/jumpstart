@@ -52,6 +52,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 6.0'
   gem 'omniauth-github', '~> 1.4'
   gem 'omniauth-twitter', '~> 1.4'
+  gem 'pundit', '~> 2.1'
   gem 'redis', '~> 4.2', '>= 4.2.2'
   gem 'sidekiq', '~> 6.0', '>= 6.0.3'
   gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
@@ -108,6 +109,10 @@ def add_users
 
   # Add Devise masqueradable to users
   inject_into_file("app/models/user.rb", "omniauthable, :masqueradable, :", after: "devise :")
+end
+
+def add_authorization
+  generate 'pundit:install'
 end
 
 def add_webpack
@@ -266,6 +271,7 @@ after_bundle do
   set_application_name
   stop_spring
   add_users
+  add_authorization
   add_webpack
   add_javascript
   add_announcements

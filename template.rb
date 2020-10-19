@@ -113,8 +113,6 @@ end
 
 def add_authorization
   generate 'pundit:install'
-
-  insert_into_file 'app/controllers/application_controller.rb', "\n" + ' include Pundit', after: 'class ApplicationController < ActionController::Base'
 end
 
 def add_webpack

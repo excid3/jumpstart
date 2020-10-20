@@ -72,7 +72,7 @@ def set_application_name
     environment "config.application_name = Rails.application.class.module_parent_name"
   end
 
-  # Announce the user where he can change the application name in the future.
+  # Announce the user where they can change the application name in the future.
   puts "You can change application name inside: ./config/application.rb"
 end
 

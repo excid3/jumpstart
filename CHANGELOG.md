@@ -1,3 +1,7 @@
+### 2020-10-24
+
+* Rescue from git configuration exception
+
 ### 2020-08-20
 
 * Add tests for generating postgres and mysql apps

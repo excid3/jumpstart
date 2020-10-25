@@ -290,7 +290,12 @@ after_bundle do
   unless ENV["SKIP_GIT"]
     git :init
     git add: "."
-    git commit: %Q{ -m 'Initial commit' }
+    # git commit will fail if user.email is not configured
+    begin
+      git commit: %( -m 'Initial commit' )
+    rescue StandardError => e
+      puts e.message
+    end
   end
 
   say

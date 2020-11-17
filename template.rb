@@ -39,9 +39,8 @@ end
 
 def add_gems
   gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
-  gem 'bootstrap', '~> 4.5'
+  gem 'bootstrap', '5.0.0.alpha3'
   gem 'devise', '~> 4.7', '>= 4.7.1'
-  gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
   gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.13'
   gem 'friendly_id', '~> 5.3'

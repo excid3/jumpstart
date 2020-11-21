@@ -38,7 +38,7 @@ def rails_6?
 end
 
 def add_gems
-  gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
+  gem 'administrate'
   gem 'bootstrap', '~> 4.5'
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'

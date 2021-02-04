@@ -38,7 +38,7 @@ def rails_6?
 end
 
 def add_gems
-  gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
+  gem 'madmin', github: 'excid3/madmin'
   gem 'bootstrap', '~> 4.5'
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap4'
@@ -141,11 +141,8 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
   JS
 
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
+end
 
-  append_to_file "app/assets/config/manifest.js", <<-RUBY
-//= link administrate/application.css
-//= link administrate/application.js
-  RUBY
 end
 
 def copy_templates
@@ -307,7 +304,7 @@ after_bundle do
   say "  # Update config/database.yml with your database credentials"
   say
   say "  rails db:create && rails db:migrate"
-  say "  rails g administrate:install # Generate admin dashboards"
+  say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  foreman start # Run Rails, sidekiq, and webpack-dev-server"
 end

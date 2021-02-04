@@ -143,8 +143,6 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
 end
 
-end
-
 def copy_templates
   remove_file "app/assets/stylesheets/application.css"
 

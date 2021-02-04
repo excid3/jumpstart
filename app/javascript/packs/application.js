@@ -3,18 +3,25 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-require("@rails/ujs").start()
-require("turbolinks").start()
+window.Rails = require("@rails/ujs")
+require("@hotwired/turbo-rails")
 require("@rails/activestorage").start()
 require("channels")
+require("trix")
+require("@rails/actiontext")
 require("local-time").start()
 
-window.Rails = Rails
+// Start Rails UJS
+Rails.start()
 
+// Stimulus
+import "controllers"
+
+// Bootstrap
 import 'bootstrap'
 import 'data-confirm-modal'
 
-$(document).on("turbolinks:load", () => {
+$(document).on("turbo:load", () => {
   $('[data-toggle="tooltip"]').tooltip()
   $('[data-toggle="popover"]').popover()
 })

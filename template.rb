@@ -53,14 +53,16 @@ def add_gems
   gem 'omniauth-github', '~> 1.4'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'pundit', '~> 2.1'
-  gem 'redis', '~> 4.2', '>= 4.2.2'
+  # Hotwire installs Redis
+  #gem 'redis', '~> 4.2', '>= 4.2.2'
   gem 'sidekiq', '~> 6.0', '>= 6.0.3'
   gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
   gem 'whenever', require: false
+  gem 'hotwire-rails'
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-    gem 'webpacker', '~> 5.1', '>= 5.1.1'
+    gem 'webpacker', '~> 5.2', '>= 5.2.1'
   end
 end
 
@@ -143,6 +145,8 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
 end
 
+def add_hotwire
+  rails_command "hotwire:install"
 end
 
 def copy_templates
@@ -276,6 +280,7 @@ after_bundle do
   add_multiple_authentication
   add_sidekiq
   add_friendly_id
+  add_hotwire
 
   copy_templates
   add_whenever

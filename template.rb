@@ -135,8 +135,7 @@ def add_javascript
 const webpack = require('webpack')
 environment.plugins.append('Provide', new webpack.ProvidePlugin({
   $: 'jquery',
-  jQuery: 'jquery',
-  Rails: '@rails/ujs'
+  jQuery: 'jquery'
 }))
   JS
 

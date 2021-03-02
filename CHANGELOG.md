@@ -1,3 +1,14 @@
+### 2021-03-02
+
+* Remove bootstrap 4:
+  * Remove gem bootstrap
+  * Remove data-confirm-modal, not yet bootstrap 5 compatible
+* Add bootstrap 5:
+  * With yarn/ webpack, BS5 only needs @popperjs/core
+  * Move css from assets/stylesheets to packs/stylesheets
+  * Refactor navbar and notices for BS5
+  * Let gem devise-bootstrapped generate all devise views
+
 ### 2020-10-24
 
 * Rescue from git configuration exception

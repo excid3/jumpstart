@@ -1,4 +1,4 @@
-### 2021-03-02
+### 2021-03-03
 
 * Remove bootstrap 4:
   * Remove gem bootstrap
@@ -7,7 +7,8 @@
   * With yarn/ webpack, BS5 only needs @popperjs/core
   * Move css from assets/stylesheets to packs/stylesheets
   * Refactor navbar and notices for BS5
-  * Let gem devise-bootstrapped generate all devise views
+  * Include devise-bootstrapped views directly in template project folder
+    * remove gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap5'
 
 ### 2020-10-24
 

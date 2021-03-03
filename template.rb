@@ -40,7 +40,6 @@ end
 def add_gems
   gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
   gem 'devise', '~> 4.7', '>= 4.7.1'
-  gem 'devise-bootstrapped', github: 'excid3/devise-bootstrapped', branch: 'bootstrap5'
   gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.13'
   gem 'friendly_id', '~> 5.3'
@@ -83,9 +82,6 @@ def add_users
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }",
               env: 'development'
   route "root to: 'home#index'"
-
-  # Devise notices are installed via Bootstrap
-  generate "devise:views:bootstrapped"
 
   # Create Devise User
   generate :devise, "User",

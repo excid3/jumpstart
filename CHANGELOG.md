@@ -1,3 +1,7 @@
+### 2021-03-04
+
+* Switch to Madmin for admin area
+
 ### 2021-03-03
 
 * Remove bootstrap 4:

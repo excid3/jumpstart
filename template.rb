@@ -38,12 +38,12 @@ def rails_6?
 end
 
 def add_gems
-  gem 'administrate', github: "excid3/administrate", branch: 'jumpstart'
   gem 'devise', '~> 4.7', '>= 4.7.1'
   gem 'devise_masquerade', '~> 1.2'
   gem 'font-awesome-sass', '~> 5.13'
   gem 'friendly_id', '~> 5.3'
   gem 'image_processing'
+  gem 'madmin'
   gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
   gem 'noticed', '~> 1.2'
@@ -52,7 +52,7 @@ def add_gems
   gem 'omniauth-twitter', '~> 1.4'
   gem 'pundit', '~> 2.1'
   gem 'redis', '~> 4.2', '>= 4.2.2'
-  gem 'sidekiq', '~> 6.0', '>= 6.0.3'
+  gem 'sidekiq', '~> 6.1'
   gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
   gem 'whenever', require: false
 
@@ -130,16 +130,12 @@ def add_javascript
 const webpack = require('webpack')
 environment.plugins.append('Provide', new webpack.ProvidePlugin({
   $: 'jquery',
-  jQuery: 'jquery'
+  jQuery: 'jquery',
+  Rails: '@rails/ujs'
 }))
   JS
 
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
-
-  append_to_file "app/assets/config/manifest.js", <<-RUBY
-//= link administrate/application.css
-//= link administrate/application.js
-  RUBY
 end
 
 def copy_templates
@@ -164,12 +160,15 @@ def add_sidekiq
     "require 'sidekiq/web'\n\n",
     before: "Rails.application.routes.draw do"
 
-  content = <<-RUBY
-    authenticate :user, lambda { |u| u.admin? } do
-      mount Sidekiq::Web => '/sidekiq'
-    end
-  RUBY
-  insert_into_file "config/routes.rb", "#{content}\n\n", after: "Rails.application.routes.draw do\n"
+  content = <<~RUBY
+                authenticate :user, lambda { |u| u.admin? } do
+                  mount Sidekiq::Web => '/sidekiq'
+
+                  namespace :madmin do
+                  end
+                end
+            RUBY
+  insert_into_file "config/routes.rb", "#{content}\n", after: "Rails.application.routes.draw do\n"
 end
 
 def add_announcements
@@ -180,38 +179,6 @@ end
 def add_notifications
   generate "noticed:model"
   route "resources :notifications, only: [:index]"
-end
-
-def add_administrate
-  generate "administrate:install"
-
-  append_to_file "app/assets/config/manifest.js" do
-    "//= link administrate/application.css\n//= link administrate/application.js"
-  end
-
-  gsub_file "app/dashboards/announcement_dashboard.rb",
-    /announcement_type: Field::String/,
-    "announcement_type: Field::Select.with_options(collection: Announcement::TYPES)"
-
-  gsub_file "app/dashboards/user_dashboard.rb",
-    /email: Field::String/,
-    "email: Field::String,\n    password: Field::String.with_options(searchable: false)"
-
-  gsub_file "app/dashboards/user_dashboard.rb",
-    /FORM_ATTRIBUTES = \[/,
-    "FORM_ATTRIBUTES = [\n    :password,"
-
-  gsub_file "app/controllers/admin/application_controller.rb",
-    /# TODO Add authentication logic here\./,
-    "redirect_to '/', alert: 'Not authorized.' unless user_signed_in? && current_user.admin?"
-
-  environment do <<-RUBY
-    # Expose our application's helpers to Administrate
-    config.to_prepare do
-      Administrate::ApplicationController.helper #{@app_name.camelize}::Application.helpers
-    end
-  RUBY
-  end
 end
 
 def add_multiple_authentication
@@ -300,8 +267,8 @@ after_bundle do
   say
   say "  # Update config/database.yml with your database credentials"
   say
-  say "  rails db:create && rails db:migrate"
-  say "  rails g administrate:install # Generate admin dashboards"
+  say "  rails db:create db:migrate"
+  say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  foreman start # Run Rails, sidekiq, and webpack-dev-server"
 end

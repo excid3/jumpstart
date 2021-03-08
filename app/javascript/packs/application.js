@@ -3,11 +3,13 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-import Rails from "@rails/ujs"
-import Turbolinks from "turbolinks"
-import * as ActiveStorage from "@rails/activestorage"
-import "channels"
-import LocalTime from "local-time"
+require("@rails/ujs").start()
+require("turbolinks").start()
+require("@rails/activestorage").start()
+require("channels")
+require("local-time").start()
+
+window.Rails = Rails
 
 import 'bootstrap'
 import "../stylesheets/application.scss"
@@ -16,8 +18,3 @@ $(document).on("turbolinks:load", () => {
   $('[data-bs-toggle="tooltip"]').tooltip()
   $('[data-bs-toggle="popover"]').popover()
 })
-
-Rails.start()
-Turbolinks.start()
-ActiveStorage.start()
-LocalTime.start()

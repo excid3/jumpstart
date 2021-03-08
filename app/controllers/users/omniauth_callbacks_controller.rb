@@ -51,6 +51,7 @@ module Users
       else
         @user = User.find_for_authentication(email: auth.info.email) || create_user
       end
+    end
 
     def service_attrs
       expires_at = auth.credentials.expires_at.present? ? Time.at(auth.credentials.expires_at) : nil

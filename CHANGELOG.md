@@ -1,3 +1,7 @@
+### 2021-03-04
+
+* Switch to Madmin for admin area
+
 ### 2020-10-24
 
 * Rescue from git configuration exception

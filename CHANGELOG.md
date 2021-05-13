@@ -1,3 +1,10 @@
+### 2021-05-13
+
+* Upgrade to Bootstrap 5
+* Remove data-confirm-modal, not yet bootstrap 5 compatible
+* Drop jQuery
+* Include devise views directly
+
 ### 2021-03-04
 
 * Switch to Madmin for admin area

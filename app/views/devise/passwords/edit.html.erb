@@ -1,9 +1,9 @@
 <div class="row">
-  <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+  <div class="col-lg-4 offset-lg-4">
     <h2 class="text-center">Change your password</h2>
 
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-    <%= devise_error_messages! %>
+      <%= render "devise/shared/error_messages", resource: resource %>
       <%= f.hidden_field :reset_password_token %>
 
       <div class="mb-3">

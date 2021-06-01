@@ -17,12 +17,13 @@ Jumpstart is a Rails template, so you pass it in as an option when creating a ne
 You'll need the following installed to run the template successfully:
 
 * Ruby 2.5 or higher
-* Redis - For ActionCable support
 * bundler - `gem install bundler`
 * rails - `gem install rails`
+* Database - we recommend Postgres, but you can use MySQL, SQLite3, etc
+* Redis - For ActionCable support
+* ImageMagick or libvips for ActiveStorage variants
 * Yarn - `brew install yarn` or [Install Yarn](https://yarnpkg.com/en/docs/install)
-* Foreman (optional) - `gem install foreman` - helps run all your
-  processes in development
+* Foreman (optional) - `gem install foreman` - helps run all your processes in development
 
 #### Creating a new app
 
@@ -40,7 +41,7 @@ rails new myapp -d postgresql -m template.rb
 
 #### Running your app
 
-To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes. 
+To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes.
 
 You can also run them in separate terminals manually if you prefer.
 

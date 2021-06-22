@@ -78,6 +78,26 @@ production:
 With the environment, the service and the app_id/app_secret. If this is done correctly, you should see login links
 for the services you have added to the encrypted credentials using `EDITOR=vim rails credentials:edit`
 
+#### Enabling Admin Panel
+App uses `madmin` [gem](https://github.com/excid3/madmin), so you need to run the madmin generator:
+
+```
+rails g madmin:install
+```
+
+This will install Madmin and generate resources for each of the models it finds.
+#### Redis set up
+##### On OSX
+```
+brew update
+brew install redis
+brew services start redis
+```
+##### Ubuntu
+```
+sudo apt-get install redis-server
+``` 
+
 #### Cleaning up
 
 ```bash

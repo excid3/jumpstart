@@ -34,12 +34,20 @@ def rails_5?
 end
 
 def rails_6?
-  Gem::Requirement.new(">= 6.0.0.beta1", "< 7").satisfied_by? rails_version
+  Gem::Requirement.new(">= 6.0.0.alpha", "< 7").satisfied_by? rails_version
+end
+
+def rails_7?
+  Gem::Requirement.new(">= 7.0.0.alpha", "< 8").satisfied_by? rails_version
 end
 
 def add_gems
   gem 'bootstrap', '5.0.0'
-  gem 'devise', '~> 4.8', '>= 4.8.0'
+  if rails_7?
+    gem "devise", github: "ghiculescu/devise", branch: "patch-2"
+  else
+    gem 'devise', '~> 4.8', '>= 4.8.0'
+  end
   gem 'devise_masquerade', '~> 1.3'
   gem 'font-awesome-sass', '~> 5.15'
   gem 'friendly_id', '~> 5.4'

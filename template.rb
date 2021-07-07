@@ -41,9 +41,13 @@ def rails_7?
   Gem::Requirement.new(">= 7.0.0.alpha", "< 8").satisfied_by? rails_version
 end
 
+def master?
+  ARGV.include? "--master"
+end
+
 def add_gems
   gem 'bootstrap', '5.0.0'
-  if rails_7?
+  if rails_7? || master?
     gem "devise", github: "ghiculescu/devise", branch: "patch-2"
   else
     gem 'devise', '~> 4.8', '>= 4.8.0'

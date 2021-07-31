@@ -65,7 +65,6 @@ def add_gems
   gem 'omniauth-github', '~> 2.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'pundit', '~> 2.1'
-  gem 'redis', '~> 4.4'
   gem 'sidekiq', '~> 6.2'
   gem 'sitemap_generator', '~> 6.1'
   gem 'whenever', require: false

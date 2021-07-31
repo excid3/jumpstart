@@ -17,12 +17,13 @@ Jumpstart is a Rails template, so you pass it in as an option when creating a ne
 You'll need the following installed to run the template successfully:
 
 * Ruby 2.5 or higher
-* Redis - For ActionCable support
 * bundler - `gem install bundler`
 * rails - `gem install rails`
+* Database - we recommend Postgres, but you can use MySQL, SQLite3, etc
+* Redis - For ActionCable support
+* ImageMagick or libvips for ActiveStorage variants
 * Yarn - `brew install yarn` or [Install Yarn](https://yarnpkg.com/en/docs/install)
-* Foreman (optional) - `gem install foreman` - helps run all your
-  processes in development
+* Foreman (optional) - `gem install foreman` - helps run all your processes in development
 
 #### Creating a new app
 
@@ -40,7 +41,7 @@ rails new myapp -d postgresql -m template.rb
 
 #### Running your app
 
-To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes. 
+To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes.
 
 You can also run them in separate terminals manually if you prefer.
 
@@ -76,6 +77,26 @@ production:
 
 With the environment, the service and the app_id/app_secret. If this is done correctly, you should see login links
 for the services you have added to the encrypted credentials using `EDITOR=vim rails credentials:edit`
+
+#### Enabling Admin Panel
+App uses `madmin` [gem](https://github.com/excid3/madmin), so you need to run the madmin generator:
+
+```
+rails g madmin:install
+```
+
+This will install Madmin and generate resources for each of the models it finds.
+#### Redis set up
+##### On OSX
+```
+brew update
+brew install redis
+brew services start redis
+```
+##### Ubuntu
+```
+sudo apt-get install redis-server
+``` 
 
 #### Cleaning up
 

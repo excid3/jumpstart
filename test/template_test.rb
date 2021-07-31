@@ -11,7 +11,7 @@ class TemplateTest < Minitest::Test
 
   def test_generator_succeeds
     output, err = capture_subprocess_io do
-      system("DISABLE_SPRING=1 SKIP_GIT=1 rails new -m template.rb test_app")
+      system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb")
     end
     assert_includes output, "Jumpstart app successfully created!"
   end
@@ -20,14 +20,14 @@ class TemplateTest < Minitest::Test
   #
   # def test_generator_with_postgres_succeeds
   #   output, err = capture_subprocess_io do
-  #     system("DISABLE_SPRING=1 SKIP_GIT=1 rails new -m template.rb -d postgresql test_app")
+  #     system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb -d postgresql")
   #   end
   #   assert_includes output, "Jumpstart app successfully created!"
   # end
 
   # def test_generator_with_mysql_succeeds
   #   output, err = capture_subprocess_io do
-  #     system("DISABLE_SPRING=1 SKIP_GIT=1 rails new -m template.rb -d mysql test_app")
+  #     system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb -d mysql")
   #   end
   #   assert_includes output, "Jumpstart app successfully created!"
   # end

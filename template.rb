@@ -58,7 +58,6 @@ def add_gems
   gem 'hotwire-rails'
   gem 'image_processing'
   gem 'madmin'
-  gem 'mini_magick', '~> 4.10'
   gem 'name_of_person', '~> 1.1'
   gem 'noticed', '~> 1.2'
   gem 'omniauth-facebook', '~> 8.0'

@@ -55,18 +55,17 @@ def add_gems
   gem 'devise_masquerade', '~> 1.3'
   gem 'font-awesome-sass', '~> 5.15'
   gem 'friendly_id', '~> 5.4'
+  gem 'hotwire-rails'
   gem 'image_processing'
   gem 'madmin'
-  gem 'mini_magick', '~> 4.10', '>= 4.10.1'
   gem 'name_of_person', '~> 1.1'
   gem 'noticed', '~> 1.2'
   gem 'omniauth-facebook', '~> 8.0'
   gem 'omniauth-github', '~> 2.0'
   gem 'omniauth-twitter', '~> 1.4'
   gem 'pundit', '~> 2.1'
-  gem 'redis', '~> 4.2', '>= 4.2.2'
   gem 'sidekiq', '~> 6.2'
-  gem 'sitemap_generator', '~> 6.1', '>= 6.1.2'
+  gem 'sitemap_generator', '~> 6.1'
   gem 'whenever', require: false
 
   if rails_5?
@@ -90,6 +89,10 @@ end
 def add_users
   route "root to: 'home#index'"
   generate "devise:install"
+
+  # Configure Devise to handle TURBO_STREAM requests like HTML requests
+  inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
+
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
   generate :devise, "User", "first_name", "last_name", "announcements_last_read_at:datetime", "admin:boolean"
 
@@ -121,10 +124,10 @@ def add_webpack
 end
 
 def add_javascript
-  run "yarn add expose-loader @popperjs/core bootstrap local-time"
+  run "yarn add expose-loader @popperjs/core bootstrap local-time @rails/request.js"
 
   if rails_5?
-    run "yarn add turbolinks @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
+    run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
   end
 
   content = <<-JS
@@ -135,6 +138,10 @@ environment.plugins.append('Provide', new webpack.ProvidePlugin({
   JS
 
   insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
+end
+
+def add_hotwire
+  rails_command "hotwire:install"
 end
 
 def copy_templates
@@ -231,6 +238,7 @@ after_bundle do
   add_multiple_authentication
   add_sidekiq
   add_friendly_id
+  add_hotwire
 
   copy_templates
   add_whenever
@@ -254,7 +262,7 @@ after_bundle do
   say "Jumpstart app successfully created!", :blue
   say
   say "To get started with your new app:", :green
-  say "  cd #{app_name}"
+  say "  cd #{original_app_name}"
   say
   say "  # Update config/database.yml with your database credentials"
   say

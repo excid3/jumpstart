@@ -260,7 +260,7 @@ after_bundle do
   say "Jumpstart app successfully created!", :blue
   say
   say "To get started with your new app:", :green
-  say "  cd #{app_name}"
+  say "  cd #{original_app_name}"
   say
   say "  # Update config/database.yml with your database credentials"
   say

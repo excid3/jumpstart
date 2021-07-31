@@ -89,6 +89,10 @@ end
 def add_users
   route "root to: 'home#index'"
   generate "devise:install"
+
+  # Configure Devise to handle TURBO_STREAM requests like HTML requests
+  inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
+
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
   generate :devise, "User", "first_name", "last_name", "announcements_last_read_at:datetime", "admin:boolean"
 

@@ -7,8 +7,8 @@ window.Rails = require("@rails/ujs")
 require("@hotwired/turbo-rails")
 require("@rails/activestorage").start()
 require("channels")
-require("trix")
-require("@rails/actiontext")
+//require("trix")
+//require("@rails/actiontext")
 require("local-time").start()
 
 // Start Rails UJS

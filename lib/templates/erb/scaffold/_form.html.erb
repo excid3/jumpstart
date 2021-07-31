@@ -23,14 +23,18 @@
     <%%= form.password_field :password_confirmation, class: 'form-control' %>
 <% else -%>
     <%%= form.label :<%= attribute.column_name %>, class: 'form-label' %>
+  <% if attribute.field_type == "checkbox" -%>
+    <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %> %>
+  <% else -%>
     <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, class: 'form-control' %>
+  <% end -%>
 <% end -%>
   </div>
 
 <% end -%>
   <div class="mb-3">
     <%% if <%= model_resource_name %>.persisted? %>
-      <div class="float-right">
+      <div class="float-end">
         <%%= link_to 'Destroy', <%= model_resource_name %>, method: :delete, class: "text-danger", data: { confirm: 'Are you sure?' } %>
       </div>
     <%% end %>

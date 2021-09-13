@@ -1,9 +1,13 @@
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    before_action :set_service
-    before_action :set_user
+    before_action :set_service, except: [:failure]
+    before_action :set_user, except: [:failure]
 
     attr_reader :service, :user
+
+    def failure
+      redirect_to root_path, alert: "Something went wrong"
+    end
 
     def facebook
       handle_auth "Facebook"

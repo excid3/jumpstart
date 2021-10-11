@@ -142,7 +142,8 @@ end
 def add_webpack
   # Rails 6+ comes with webpacker by default, so we can skip this step
   return if rails_6?
-
+  # Rails 7 won't be using webpacker
+  return if rails_7?
   # Our application layout already includes the javascript_pack_tag,
   # so we don't need to inject it
   rails_command 'webpacker:install'

@@ -143,7 +143,7 @@ def add_webpack
   # Rails 6+ comes with webpacker by default, so we can skip this step
   return if rails_6?
   # Rails 7 won't be using webpacker
-  return if rails_7?
+  return if rails_7? || master?
   # Our application layout already includes the javascript_pack_tag,
   # so we don't need to inject it
   rails_command 'webpacker:install'
@@ -156,6 +156,9 @@ def add_javascript
     run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
   end
 
+  # Rails 7 won't be using webpacker
+  return if rails_7? || master?
+  
   content = <<-JS
 const webpack = require('webpack')
 environment.plugins.append('Provide', new webpack.ProvidePlugin({

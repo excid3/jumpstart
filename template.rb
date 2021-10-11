@@ -48,7 +48,7 @@ end
 def add_gems
   gem 'bootstrap', '5.0.0'
   if rails_7? || master?
-    gem "devise", github: "ghiculescu/devise", branch: "patch-2"
+    gem 'devise', git: 'https://github.com/heartcombo/devise', branch: 'master'
   else
     gem 'devise', '~> 4.8', '>= 4.8.0'
   end

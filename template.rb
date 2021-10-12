@@ -195,6 +195,10 @@ def add_sidekiq
                   mount Sidekiq::Web => '/sidekiq'
 
                   namespace :madmin do
+                    resources :impersonates do
+                      post :impersonate, on: :member
+                      post :stop_impersonating, on: :collection
+                    end
                   end
                 end
             RUBY

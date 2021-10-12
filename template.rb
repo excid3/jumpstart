@@ -52,7 +52,6 @@ def add_gems
   else
     gem 'devise', '~> 4.8', '>= 4.8.0'
   end
-  gem 'devise_masquerade', '~> 1.3'
   gem 'font-awesome-sass', '~> 5.15'
   gem 'friendly_id', '~> 5.4'
   gem 'hotwire-rails'
@@ -63,6 +62,7 @@ def add_gems
   gem 'omniauth-facebook', '~> 8.0'
   gem 'omniauth-github', '~> 2.0'
   gem 'omniauth-twitter', '~> 1.4'
+  gem 'pretender', '~> 0.3.4'
   gem 'pundit', '~> 2.1'
   gem 'sidekiq', '~> 6.2'
   gem 'sitemap_generator', '~> 6.1'
@@ -130,9 +130,6 @@ def add_users
   if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
     gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
   end
-
-  # Add Devise masqueradable to users
-  inject_into_file("app/models/user.rb", "omniauthable, :masqueradable, :", after: "devise :")
 end
 
 def add_authorization

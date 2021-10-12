@@ -1,10 +1,3 @@
-<% if user_masquerade? %>
-  <div class="alert alert-warning text-center">
-    You're logged in as <b><%= current_user.name %> (<%= current_user.email %>)</b>
-    <%= link_to back_masquerade_path(current_user) do %><%= icon("fas", "times") %> Logout <% end %>
-  </div>
-<% end %>
-
 <nav class="navbar navbar-expand-md navbar-light bg-light">
   <div class="container mx-auto">
     <%= link_to Rails.configuration.application_name, root_path, class: "navbar-brand" %>

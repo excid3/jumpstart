@@ -46,13 +46,12 @@ def master?
 end
 
 def add_gems
-  gem 'bootstrap', '5.0.0'
+  gem 'cssbundling-rails'
   if rails_7? || master?
     gem 'devise', git: 'https://github.com/heartcombo/devise', branch: 'master'
   else
     gem 'devise', '~> 4.8', '>= 4.8.0'
   end
-  gem 'font-awesome-sass', '~> 5.15'
   gem 'friendly_id', '~> 5.4'
   gem 'hotwire-rails'
   gem 'image_processing'
@@ -249,6 +248,10 @@ def add_sitemap
   rails_command "sitemap:install"
 end
 
+def add_bootstrap
+  rails_command "css:install:bootstrap"
+end
+
 # Main setup
 add_template_repository_to_source_path
 
@@ -271,6 +274,7 @@ after_bundle do
   copy_templates
   add_whenever
   add_sitemap
+  add_bootstrap
 
   rails_command "active_storage:install"
 

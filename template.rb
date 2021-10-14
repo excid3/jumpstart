@@ -252,6 +252,10 @@ def add_bootstrap
   rails_command "css:install:bootstrap"
 end
 
+def add_annoucements_css
+  insert_into_file 'app/assets/stylesheets/application.bootstrap.scss', '@import "jumpstart/announcements";'
+end
+
 # Main setup
 add_template_repository_to_source_path
 
@@ -275,6 +279,7 @@ after_bundle do
   add_whenever
   add_sitemap
   add_bootstrap
+  add_annoucements_css
 
   rails_command "active_storage:install"
 

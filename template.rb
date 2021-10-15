@@ -155,11 +155,14 @@ end
 
 def copy_templates
   remove_file "app/assets/stylesheets/application.css"
+  remove_file "app/javascript/controllers/index.js"
+  remove_file "Procfile.dev"
 
   copy_file "Procfile"
   copy_file "Procfile.dev"
   copy_file ".foreman"
   copy_file "esbuild.config.js"
+  copy_file "app/javascript/controllers/index.js"
 
   directory "app", force: true
   directory "config", force: true
@@ -249,14 +252,7 @@ def add_esbuild_script
 end
 
 def add_esbuild_imports
-inject_into_file 'app/javascript/controllers/index.js' do <<~JS
-import './channels/**/*_channel.js'
-import controllers from './**/*_controller.js'
-controllers.forEach((controller) => {
-  application.register(controller.name, controller.module.default)
-})
-  JS
-  end
+  insert_into_file 'app/javascript/application.js', "import './channels/**/*_channel.js'"
 end
 
 # Main setup

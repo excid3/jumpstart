@@ -142,10 +142,10 @@ def add_jsbundling
 end
 
 def add_javascript
-  run "yarn add expose-loader @popperjs/core bootstrap local-time @rails/request.js"
+  run "yarn add expose-loader @popperjs/core bootstrap local-time @rails/request.js esbuild-rails"
 
   if rails_5?
-    run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
+    run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre esbuild-rails"
   end
 end
 
@@ -159,6 +159,7 @@ def copy_templates
   copy_file "Procfile"
   copy_file "Procfile.dev"
   copy_file ".foreman"
+  copy_file "esbuild.config.js"
 
   directory "app", force: true
   directory "config", force: true
@@ -242,6 +243,22 @@ def add_announcements_css
   insert_into_file 'app/assets/stylesheets/application.bootstrap.scss', '@import "jumpstart/announcements";'
 end
 
+def add_esbuild_script
+  build_script = "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds"
+  gsub_file "package.json", /#{build_script}/, "node esbuild.config.js"
+end
+
+def add_esbuild_imports
+inject_into_file 'app/javascript/controllers/index.js' do <<~JS
+import './channels/**/*_channel.js'
+import controllers from './**/*_controller.js'
+controllers.forEach((controller) => {
+  application.register(controller.name, controller.module.default)
+})
+  JS
+  end
+end
+
 # Main setup
 add_template_repository_to_source_path
 
@@ -266,6 +283,8 @@ after_bundle do
   add_sitemap
   add_bootstrap
   add_announcements_css
+  add_esbuild_script
+  add_esbuild_imports
 
   rails_command "active_storage:install"
 
@@ -292,5 +311,5 @@ after_bundle do
   say "  rails db:create db:migrate"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
-  say "  foreman start # Run Rails, sidekiq, and dev-server"
+  say "  bin/dev"
 end

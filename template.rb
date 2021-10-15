@@ -55,6 +55,7 @@ def add_gems
   gem 'friendly_id', '~> 5.4'
   gem 'hotwire-rails'
   gem 'image_processing'
+  gem 'jsbundling-rails'
   gem 'madmin'
   gem 'name_of_person', '~> 1.1'
   gem 'noticed', '~> 1.2'
@@ -70,7 +71,6 @@ def add_gems
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-    gem 'webpacker', '~> 5.3'
   end
 end
 
@@ -137,13 +137,8 @@ def add_authorization
   generate 'pundit:install'
 end
 
-def add_webpack
-  # Rails 6+ comes with webpacker by default, so we can skip this step
-  return if rails_6?
-
-  # Our application layout already includes the javascript_pack_tag,
-  # so we don't need to inject it
-  rails_command 'webpacker:install'
+def add_jsbundling
+  rails_command "javascript:install:esbuild"
 end
 
 def add_javascript
@@ -152,15 +147,6 @@ def add_javascript
   if rails_5?
     run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre"
   end
-
-  content = <<-JS
-const webpack = require('webpack')
-environment.plugins.append('Provide', new webpack.ProvidePlugin({
-  Rails: '@rails/ujs'
-}))
-  JS
-
-  insert_into_file 'config/webpack/environment.js', content + "\n", before: "module.exports = environment"
 end
 
 def add_hotwire
@@ -266,7 +252,7 @@ after_bundle do
   stop_spring
   add_users
   add_authorization
-  add_webpack
+  add_jsbundling
   add_javascript
   add_announcements
   add_notifications
@@ -306,5 +292,5 @@ after_bundle do
   say "  rails db:create db:migrate"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
-  say "  foreman start # Run Rails, sidekiq, and webpack-dev-server"
+  say "  foreman start # Run Rails, sidekiq, and dev-server"
 end

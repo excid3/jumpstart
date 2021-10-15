@@ -28,20 +28,22 @@ You'll need the following installed to run the template successfully:
 #### Creating a new app
 
 ```bash
-rails new myapp -d postgresql -m https://raw.githubusercontent.com/excid3/jumpstart/master/template.rb
+rails new myapp -d postgresql -m https://raw.githubusercontent.com/excid3/jumpstart/master/template.rb --skip-javascript
 ```
 
 Or if you have downloaded this repo, you can reference template.rb locally:
 
 ```bash
-rails new myapp -d postgresql -m template.rb
+rails new myapp -d postgresql -m template.rb --skip-javascript
 ```
 
 ❓Having trouble? Try adding `DISABLE_SPRING=1` before `rails new`. Spring will get confused if you create an app with the same name twice.
 
 #### Running your app
 
-To run your app, use `foreman start`. Foreman will run `Procfile.dev` via `foreman start -f Procfile.dev` as configured by the `.foreman` file and will launch the development processes `rails server`, `sidekiq`, and `webpack-dev-server` processes.
+```bash
+/bin/dev
+```
 
 You can also run them in separate terminals manually if you prefer.
 

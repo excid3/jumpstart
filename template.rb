@@ -247,8 +247,8 @@ def add_announcements_css
 end
 
 def add_esbuild_script
-  build_script = "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds"
-  gsub_file "package.json", /#{build_script}/, "node esbuild.config.js"
+  build_script = "node esbuild.config.js" 
+  run %(npm set-script build:css "#{build_script}")
 end
 
 def add_esbuild_imports

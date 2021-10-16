@@ -51,6 +51,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          npm install -g npm
           sudo apt-get -yqq install libsqlite3-dev libpq-dev libmysqlclient-dev
           gem install rails
 

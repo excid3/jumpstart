@@ -41,14 +41,10 @@ def rails_7?
   Gem::Requirement.new(">= 7.0.0.alpha", "< 8").satisfied_by? rails_version
 end
 
-def master?
-  ARGV.include? "--master"
-end
-
 def add_gems
   gem 'cssbundling-rails'
-  if rails_7? || master?
-    gem 'devise', git: 'https://github.com/heartcombo/devise', branch: 'master'
+  if rails_7?
+    gem 'devise', git: 'https://github.com/heartcombo/devise', branch: 'main'
   else
     gem 'devise', '~> 4.8', '>= 4.8.0'
   end

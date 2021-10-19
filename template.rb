@@ -54,7 +54,7 @@ def add_gems
   gem 'jsbundling-rails'
   gem 'madmin'
   gem 'name_of_person', '~> 1.1'
-  gem 'noticed', '~> 1.2'
+  gem 'noticed', '~> 1.4'
   gem 'omniauth-facebook', '~> 8.0'
   gem 'omniauth-github', '~> 2.0'
   gem 'omniauth-twitter', '~> 1.4'
@@ -196,7 +196,6 @@ def add_announcements
 end
 
 def add_notifications
-  generate "noticed:model"
   route "resources :notifications, only: [:index]"
 end
 
@@ -243,7 +242,7 @@ def add_announcements_css
 end
 
 def add_esbuild_script
-  build_script = "node esbuild.config.js" 
+  build_script = "node esbuild.config.js"
   run %(npm set-script build:css "#{build_script}")
 end
 
@@ -301,6 +300,7 @@ after_bundle do
   say "  # Update config/database.yml with your database credentials"
   say
   say "  rails db:create db:migrate"
+  say "  rails g noticed:model"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  bin/dev"

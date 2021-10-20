@@ -1,3 +1,6 @@
+### 2021-10-20
+* Support for applying template to existing project
+
 ### 2021-05-13
 
 * Upgrade to Bootstrap 5

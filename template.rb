@@ -250,14 +250,10 @@ def add_esbuild_imports
   insert_into_file 'app/javascript/application.js', "import './channels/**/*_channel.js'"
 end
 
-# Main setup
-add_template_repository_to_source_path
-
-add_gems
 
 after_bundle do
   set_application_name
-  stop_spring
+  stop_spring if defined?(Spring)
   add_users
   add_authorization
   add_jsbundling
@@ -304,4 +300,14 @@ after_bundle do
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  bin/dev"
+end
+
+# Main setup
+add_template_repository_to_source_path
+
+add_gems
+
+if app_path.absolute?
+  run_bundle
+  run_after_bundle_callbacks
 end

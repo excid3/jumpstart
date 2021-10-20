@@ -11,7 +11,15 @@ class TemplateTest < Minitest::Test
 
   def test_generator_succeeds
     output, err = capture_subprocess_io do
-      system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb")
+      system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb --skip-javascript")
+    end
+    assert_includes output, "Jumpstart app successfully created!"
+  end
+
+  def test_apply_template_succeeds
+    output, _err = capture_subprocess_io do
+      system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app --skip-javascript")
+      system("cd test_app && rails app:template LOCATION=template.rb")
     end
     assert_includes output, "Jumpstart app successfully created!"
   end

@@ -31,6 +31,14 @@ You'll need the following installed to run the template successfully:
 rails new myapp -d postgresql -m https://raw.githubusercontent.com/excid3/jumpstart/master/template.rb --skip-javascript
 ```
 
+Or create the app first and apply the template
+
+```sh
+rails new myapp --skip-javascript --database=postgresql
+# Configure database.yml
+rails app:template LOCATION=https://raw.githubusercontent.com/excid3/jumpstart/master/template.rb
+```
+
 Or if you have downloaded this repo, you can reference template.rb locally:
 
 ```bash
@@ -98,7 +106,7 @@ brew services start redis
 ##### Ubuntu
 ```
 sudo apt-get install redis-server
-``` 
+```
 
 #### Cleaning up
 

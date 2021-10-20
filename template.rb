@@ -307,7 +307,7 @@ add_template_repository_to_source_path
 
 add_gems
 
-if app_path.absolute?
+if app_path.is_a?(Pathname)
   run_bundle
   run_after_bundle_callbacks
 end

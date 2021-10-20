@@ -62,7 +62,7 @@ jobs:
         run: |
           npm install -g npm
           sudo apt-get -yqq install libsqlite3-dev libpq-dev libmysqlclient-dev
-          gem install rails -v MATRIX_RAILS_VERSION
+          gem install rails -v $MATRIX_RAILS_VERSION
 
       # Clean up git repo so the new rails template doesn't conflict
       - name: Remove git repo

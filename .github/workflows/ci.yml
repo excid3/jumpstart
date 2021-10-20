@@ -10,7 +10,14 @@ on:
 
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        rails: ["6.0", "6.1", "7.0.0.alpha2"]
+        ruby: [3.0]
     runs-on: ubuntu-latest
+    name: Test against ${{ matrix.ruby }} - Rails ${{ matrix.rails }}
+
     services:
       postgres:
         image: postgres:14
@@ -39,10 +46,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Setup Ruby 3.0
+      - name: Setup Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0
+          ruby-version: ${{ matrix.ruby }}
 
       - name: Setup Node 14
         uses: actions/setup-node@v1
@@ -50,10 +57,12 @@ jobs:
           node-version: 14.x
 
       - name: Install dependencies
+        env:
+          MATRIX_RAILS_VERSION: ${{ matrix.rails }}
         run: |
           npm install -g npm
           sudo apt-get -yqq install libsqlite3-dev libpq-dev libmysqlclient-dev
-          gem install rails
+          gem install rails -v MATRIX_RAILS_VERSION
 
       # Clean up git repo so the new rails template doesn't conflict
       - name: Remove git repo

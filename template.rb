@@ -253,6 +253,7 @@ end
 
 def add_esbuild_imports
   insert_into_file 'app/javascript/application.js', "import './channels/**/*_channel.js'"
+  insert_into_file 'app/javascript/application.js', "\nimport './custom.js'"
 end
 
 # Main setup

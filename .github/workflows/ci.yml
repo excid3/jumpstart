@@ -13,10 +13,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rails: ["6.0", "6.1", "7.0.0.alpha2"]
+        rails: ["6.0.3", "6.1", "7.0.0.alpha2"]
         ruby: [3.0]
     runs-on: ubuntu-latest
-    name: Test against ${{ matrix.ruby }} - Rails ${{ matrix.rails }}
+    name: Test against Ruby ${{ matrix.ruby }} - Rails ${{ matrix.rails }}
 
     services:
       postgres:

@@ -63,7 +63,7 @@ def add_gems
   gem 'sidekiq', '~> 6.2'
   gem 'sitemap_generator', '~> 6.1'
   gem 'whenever', require: false
-  gem 'responders', github: 'heartcombo/responders'
+  gem 'responders', github: 'heartcombo/responders', branch: 'main'
 
   if rails_5?
     gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"

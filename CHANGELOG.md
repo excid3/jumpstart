@@ -1,3 +1,8 @@
+### 2021-12-27
+
+* Support Rails 7.0
+* Drop support for Rails 5.2 and earlier
+
 ### 2021-05-13
 
 * Upgrade to Bootstrap 5

@@ -29,25 +29,13 @@ def rails_version
   @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
 end
 
-def rails_5?
-  Gem::Requirement.new(">= 5.2.0", "< 6.0.0.beta1").satisfied_by? rails_version
-end
-
-def rails_6?
-  Gem::Requirement.new(">= 6.0.0.alpha", "< 7").satisfied_by? rails_version
-end
-
-def rails_7?
-  Gem::Requirement.new(">= 7.0.0.alpha", "< 8").satisfied_by? rails_version
+def rails_6_or_newer?
+  Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
 end
 
 def add_gems
   gem 'cssbundling-rails'
-  if rails_7?
-    gem 'devise', git: 'https://github.com/heartcombo/devise', branch: 'main'
-  else
-    gem 'devise', '~> 4.8', '>= 4.8.0'
-  end
+  gem 'devise', '~> 4.8', '>= 4.8.0'
   gem 'friendly_id', '~> 5.4'
   gem 'hotwire-rails'
   gem 'image_processing'
@@ -64,19 +52,11 @@ def add_gems
   gem 'sitemap_generator', '~> 6.1'
   gem 'whenever', require: false
   gem 'responders', github: 'heartcombo/responders', branch: 'main'
-
-  if rails_5?
-    gsub_file "Gemfile", /gem 'sqlite3'/, "gem 'sqlite3', '~> 1.3.0'"
-  end
 end
 
 def set_application_name
   # Add Application Name to Config
-  if rails_5?
-    environment "config.application_name = Rails.application.class.parent_name"
-  else
-    environment "config.application_name = Rails.application.class.module_parent_name"
-  end
+  environment "config.application_name = Rails.application.class.module_parent_name"
 
   # Announce the user where they can change the application name in the future.
   puts "You can change application name inside: ./config/application.rb"
@@ -138,11 +118,7 @@ def add_jsbundling
 end
 
 def add_javascript
-  run "yarn add expose-loader @popperjs/core bootstrap local-time @rails/request.js esbuild-rails"
-
-  if rails_5?
-    run "yarn add @rails/actioncable@pre @rails/actiontext@pre @rails/activestorage@pre @rails/ujs@pre esbuild-rails"
-  end
+  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
 end
 
 def add_hotwire
@@ -225,10 +201,6 @@ def add_friendly_id
   insert_into_file( Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
 end
 
-def stop_spring
-  run "spring stop"
-end
-
 def add_sitemap
   rails_command "sitemap:install"
 end
@@ -251,8 +223,8 @@ def add_esbuild_script
   end
 end
 
-def add_esbuild_imports
-  insert_into_file 'app/javascript/application.js', "import './channels/**/*_channel.js'"
+unless rails_6_or_newer?
+  puts "Please use Rails 6.0 or newer to create a Jumpstart application"
 end
 
 # Main setup
@@ -262,7 +234,6 @@ add_gems
 
 after_bundle do
   set_application_name
-  stop_spring
   add_users
   add_authorization
   add_jsbundling
@@ -280,7 +251,6 @@ after_bundle do
   add_bootstrap
   add_announcements_css
   add_esbuild_script
-  add_esbuild_imports
 
   rails_command "active_storage:install"
 

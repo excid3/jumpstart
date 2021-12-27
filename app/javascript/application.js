@@ -3,23 +3,17 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 
-window.Rails = require("@rails/ujs")
-require("@hotwired/turbo-rails")
+import "@hotwired/turbo-rails"
 require("@rails/activestorage").start()
-require("channels")
 //require("trix")
 //require("@rails/actiontext")
 require("local-time").start()
+require("@rails/ujs").start()
 
-// Start Rails UJS
-Rails.start()
+import './channels/**/*_channel.js'
+import "./controllers"
 
-// Stimulus
-import "controllers"
-
-// Bootstrap
 import 'bootstrap'
-
 document.addEventListener("turbo:load", () => {
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -31,3 +25,4 @@ document.addEventListener("turbo:load", () => {
     return new bootstrap.Popover(popoverTriggerEl)
   })
 })
+import './channels/**/*_channel.js'

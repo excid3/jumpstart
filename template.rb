@@ -37,7 +37,6 @@ def add_gems
   gem 'cssbundling-rails'
   gem 'devise', '~> 4.8', '>= 4.8.0'
   gem 'friendly_id', '~> 5.4'
-  gem 'hotwire-rails'
   gem 'image_processing'
   gem 'jsbundling-rails'
   gem 'madmin'
@@ -119,10 +118,6 @@ end
 
 def add_javascript
   run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
-end
-
-def add_hotwire
-  rails_command "hotwire:install"
 end
 
 def copy_templates
@@ -243,7 +238,6 @@ after_bundle do
   add_multiple_authentication
   add_sidekiq
   add_friendly_id
-  add_hotwire
 
   copy_templates
   add_whenever

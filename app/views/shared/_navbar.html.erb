@@ -38,7 +38,7 @@
                 <%= link_to "Admin Area", madmin_root_path, class: "dropdown-item" %>
               <% end %>
               <div class="dropdown-divider"></div>
-              <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+              <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
             </div>
           </li>
 

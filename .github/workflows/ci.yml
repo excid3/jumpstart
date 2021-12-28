@@ -39,15 +39,15 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Setup Ruby 3.0
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0
+          ruby-version: '3.0'
 
-      - name: Setup Node 14
+      - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: '16.x'
 
       - name: Install dependencies
         run: |

@@ -42,7 +42,7 @@ rails new myapp -d postgresql -m template.rb --skip-javascript
 #### Running your app
 
 ```bash
-/bin/dev
+bin/dev
 ```
 
 You can also run them in separate terminals manually if you prefer.

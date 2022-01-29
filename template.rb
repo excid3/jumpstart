@@ -34,7 +34,10 @@ def rails_6_or_newer?
 end
 
 def add_gems
-  gem 'cssbundling-rails'
+  unless IO.read("Gemfile") =~ /^\s*gem ['"]cssbundling-rails['"]/
+    gem 'cssbundling-rails'
+  end
+
   gem 'devise', '~> 4.8', '>= 4.8.0'
   gem 'friendly_id', '~> 5.4'
   gem 'image_processing'

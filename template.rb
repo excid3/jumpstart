@@ -125,6 +125,7 @@ end
 
 def copy_templates
   remove_file "app/assets/stylesheets/application.css"
+  remove_file "app/javascript/application.js"
   remove_file "app/javascript/controllers/index.js"
   remove_file "Procfile.dev"
 
@@ -132,6 +133,7 @@ def copy_templates
   copy_file "Procfile.dev"
   copy_file ".foreman"
   copy_file "esbuild.config.js"
+  copy_file "app/javascript/application.js"
   copy_file "app/javascript/controllers/index.js"
 
   directory "app", force: true
@@ -241,15 +243,14 @@ after_bundle do
   add_multiple_authentication
   add_sidekiq
   add_friendly_id
-
-  copy_templates
+  add_bootstrap
   add_whenever
   add_sitemap
-  add_bootstrap
   add_announcements_css
   add_esbuild_script
-
   rails_command "active_storage:install"
+
+  copy_templates
 
   # Commit everything to git
   unless ENV["SKIP_GIT"]

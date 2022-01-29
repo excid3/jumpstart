@@ -13,7 +13,8 @@ require("@rails/ujs").start()
 import './channels/**/*_channel.js'
 import "./controllers"
 
-import 'bootstrap'
+import * as bootstrap from "bootstrap"
+
 document.addEventListener("turbo:load", () => {
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -25,4 +26,3 @@ document.addEventListener("turbo:load", () => {
     return new bootstrap.Popover(popoverTriggerEl)
   })
 })
-import './channels/**/*_channel.js'

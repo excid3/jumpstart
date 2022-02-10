@@ -33,10 +33,18 @@ def rails_6_or_newer?
   Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
 end
 
+def gemfile_contents
+  @gemfile_contents ||= IO.read("Gemfile")
+end
+
+def add_gem(name, *options)
+  return if gemfile_contents =~ /^\s*gem ['"]#{name}['"]/
+  gem name, *options
+end
+
 def add_gems
-  unless IO.read("Gemfile") =~ /^\s*gem ['"]cssbundling-rails['"]/
-    gem 'cssbundling-rails'
-  end
+  add_gem 'cssbundling-rails'
+  add_gem 'stimulus-rails'
 
   gem 'devise', '~> 4.8', '>= 4.8.0'
   gem 'friendly_id', '~> 5.4'

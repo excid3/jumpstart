@@ -45,23 +45,22 @@ end
 def add_gems
   add_gem 'cssbundling-rails'
   add_gem 'stimulus-rails'
-
-  gem 'devise', '~> 4.8', '>= 4.8.0'
-  gem 'friendly_id', '~> 5.4'
-  gem 'image_processing'
-  gem 'jsbundling-rails'
-  gem 'madmin'
-  gem 'name_of_person', '~> 1.1'
-  gem 'noticed', '~> 1.4'
-  gem 'omniauth-facebook', '~> 8.0'
-  gem 'omniauth-github', '~> 2.0'
-  gem 'omniauth-twitter', '~> 1.4'
-  gem 'pretender', '~> 0.3.4'
-  gem 'pundit', '~> 2.1'
-  gem 'sidekiq', '~> 6.2'
-  gem 'sitemap_generator', '~> 6.1'
-  gem 'whenever', require: false
-  gem 'responders', github: 'heartcombo/responders', branch: 'main'
+  add_gem 'devise', '~> 4.8', '>= 4.8.0'
+  add_gem 'friendly_id', '~> 5.4'
+  add_gem 'image_processing'
+  add_gem 'jsbundling-rails'
+  add_gem 'madmin'
+  add_gem 'name_of_person', '~> 1.1'
+  add_gem 'noticed', '~> 1.4'
+  add_gem 'omniauth-facebook', '~> 8.0'
+  add_gem 'omniauth-github', '~> 2.0'
+  add_gem 'omniauth-twitter', '~> 1.4'
+  add_gem 'pretender', '~> 0.3.4'
+  add_gem 'pundit', '~> 2.1'
+  add_gem 'sidekiq', '~> 6.2'
+  add_gem 'sitemap_generator', '~> 6.1'
+  add_gem 'whenever', require: false
+  add_gem 'responders', github: 'heartcombo/responders', branch: 'main'
 end
 
 def set_application_name
@@ -284,5 +283,6 @@ after_bundle do
   say "  rails g noticed:model"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
+  say "  bundle"
   say "  bin/dev"
 end

@@ -40,7 +40,6 @@ def add_gems
 
   gem 'devise', '~> 4.8', '>= 4.8.0'
   gem 'friendly_id', '~> 5.4'
-  gem 'image_processing'
   gem 'jsbundling-rails'
   gem 'madmin'
   gem 'name_of_person', '~> 1.1'

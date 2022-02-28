@@ -34,25 +34,22 @@ def rails_6_or_newer?
 end
 
 def add_gems
-  unless IO.read("Gemfile") =~ /^\s*gem ['"]cssbundling-rails['"]/
-    gem 'cssbundling-rails'
-  end
-
-  gem 'devise', '~> 4.8', '>= 4.8.0'
-  gem 'friendly_id', '~> 5.4'
-  gem 'jsbundling-rails'
-  gem 'madmin'
-  gem 'name_of_person', '~> 1.1'
-  gem 'noticed', '~> 1.4'
-  gem 'omniauth-facebook', '~> 8.0'
-  gem 'omniauth-github', '~> 2.0'
-  gem 'omniauth-twitter', '~> 1.4'
-  gem 'pretender', '~> 0.3.4'
-  gem 'pundit', '~> 2.1'
-  gem 'sidekiq', '~> 6.2'
-  gem 'sitemap_generator', '~> 6.1'
-  gem 'whenever', require: false
-  gem 'responders', github: 'heartcombo/responders', branch: 'main'
+  add_gem 'cssbundling-rails'
+  add_gem 'devise', '~> 4.8', '>= 4.8.0'
+  add_gem 'friendly_id', '~> 5.4'
+  add_gem 'jsbundling-rails'
+  add_gem 'madmin'
+  add_gem 'name_of_person', '~> 1.1'
+  add_gem 'noticed', '~> 1.4'
+  add_gem 'omniauth-facebook', '~> 8.0'
+  add_gem 'omniauth-github', '~> 2.0'
+  add_gem 'omniauth-twitter', '~> 1.4'
+  add_gem 'pretender', '~> 0.3.4'
+  add_gem 'pundit', '~> 2.1'
+  add_gem 'sidekiq', '~> 6.2'
+  add_gem 'sitemap_generator', '~> 6.1'
+  add_gem 'whenever', require: false
+  add_gem 'responders', github: 'heartcombo/responders', branch: 'main'
 end
 
 def set_application_name
@@ -220,6 +217,14 @@ def add_esbuild_script
   else
     run %(npm set-script build "#{build_script}")
   end
+end
+
+def add_gem(name, *options)
+  gem(name, *options) unless gem_exists?(name)
+end
+
+def gem_exists?(name)
+  IO.read("Gemfile") =~ /^\s*gem ['"]#{name}['"]/
 end
 
 unless rails_6_or_newer?

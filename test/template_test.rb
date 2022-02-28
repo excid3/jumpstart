@@ -10,10 +10,15 @@ class TemplateTest < Minitest::Test
   end
 
   def test_generator_succeeds
-    output, err = capture_subprocess_io do
+    output, _err = capture_subprocess_io do
       system("DISABLE_SPRING=1 SKIP_GIT=1 rails new test_app -m template.rb")
     end
     assert_includes output, "Jumpstart app successfully created!"
+
+    output, _err = capture_subprocess_io do
+      system("cd test_app && yarn build")
+    end
+    assert_includes output, "Done in "
   end
 
   # TODO: Fix these tests on CI so they don't fail on db:create

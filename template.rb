@@ -248,7 +248,8 @@ after_bundle do
   add_announcements_css
   add_esbuild_script
   rails_command "active_storage:install"
-  
+
+  # Make sure Linux is in the Gemfile.lock for deploying
   run "bundle lock --add-platform x86_64-linux"
 
   copy_templates

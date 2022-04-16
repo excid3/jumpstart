@@ -219,6 +219,20 @@ def add_esbuild_script
   end
 end
 
+def add_github_actions_ci
+  script = <<~EOS
+    # See https://github.com/andyw8/setup-rails for more information
+  
+    name: Verify
+    on: [push]
+
+    jobs:
+      verify:
+        uses: andyw8/setup-rails/.github/workflows/verify.yml@v1
+  EOS
+  create_file '.github/workflows/verify.yml', script
+end
+
 def add_gem(name, *options)
   gem(name, *options) unless gem_exists?(name)
 end
@@ -252,6 +266,7 @@ after_bundle do
   add_sitemap
   add_announcements_css
   add_esbuild_script
+  add_github_actions_ci
   rails_command "active_storage:install"
 
   # Make sure Linux is in the Gemfile.lock for deploying

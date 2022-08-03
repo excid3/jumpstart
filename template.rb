@@ -111,8 +111,11 @@ def add_authorization
   generate 'pundit:install'
 end
 
-def add_jsbundling
-  rails_command "javascript:install:esbuild"
+def default_to_esbuild
+  return if options[:javascript] == "esbuild"
+  unless options[:skip_javascript]
+    @options = options.merge(javascript: "esbuild")
+  end
 end
 
 def add_javascript
@@ -233,14 +236,13 @@ end
 
 # Main setup
 add_template_repository_to_source_path
-
+default_to_esbuild
 add_gems
 
 after_bundle do
   set_application_name
   add_users
   add_authorization
-  add_jsbundling
   add_javascript
   add_announcements
   add_notifications

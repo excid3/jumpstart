@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   impersonates :user
-  include Pundit
+  include Pundit::Authorization
 
   protect_from_forgery with: :exception
 

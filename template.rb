@@ -215,10 +215,15 @@ end
 def add_esbuild_script
   build_script = "node esbuild.config.js"
 
-  if (`npx -v`.to_f < 7.1 rescue "Missing")
-    say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
-  else
+  case `npx -v`.to_f
+  when 7.1...8.0
     run %(npm set-script build "#{build_script}")
+    run %(yarn build)
+  when (8.0..)
+    run %(npm pkg set scripts.build="#{build_script}")
+    run %(yarn build)
+  else
+    say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
   end
 end
 

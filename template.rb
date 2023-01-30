@@ -131,7 +131,7 @@ def copy_templates
   copy_file "Procfile"
   copy_file "Procfile.dev"
   copy_file ".foreman"
-  copy_file "esbuild.config.js"
+  copy_file "esbuild.config.mjs"
   copy_file "app/javascript/application.js"
   copy_file "app/javascript/controllers/index.js"
 
@@ -213,7 +213,7 @@ def add_announcements_css
 end
 
 def add_esbuild_script
-  build_script = "node esbuild.config.js"
+  build_script = "node esbuild.config.mjs"
 
   case `npx -v`.to_f
   when 7.1...8.0

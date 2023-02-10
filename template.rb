@@ -279,6 +279,8 @@ after_bundle do
     end
   end
 
+  rails_command "db:create"
+
   say
   say "Jumpstart app successfully created!", :blue
   say
@@ -286,9 +288,9 @@ after_bundle do
   say "  cd #{original_app_name}"
   say
   say "  # Update config/database.yml with your database credentials"
-  say
-  say "  rails db:create db:migrate"
+
   say "  rails g noticed:model"
+  say "  rails db:migrate"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  bin/dev"

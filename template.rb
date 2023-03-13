@@ -260,8 +260,8 @@ after_bundle do
   say
   say "  # Update config/database.yml with your database credentials"
   say
-  say "  rails g noticed:model"
   say "  rails db:create db:migrate"
+  say "  rails g noticed:model"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  bin/dev"

@@ -92,7 +92,7 @@ def default_to_esbuild
 end
 
 def add_javascript
-  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
+  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js chokidar"
 end
 
 def copy_templates

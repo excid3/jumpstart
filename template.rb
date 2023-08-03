@@ -25,8 +25,14 @@ def add_template_repository_to_source_path
   end
 end
 
+def read_gemfile?
+  File.open("Gemfile").each_line do |line|
+    return true if line.strip.start_with?("rails") && line.include?("6.")
+  end
+end
+
 def rails_version
-  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
+  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING) || read_gemfile?
 end
 
 def rails_7_or_newer?
@@ -75,13 +81,11 @@ def add_users
 
   # Set admin default to false
   in_root do
-    migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
+    migration = Dir.glob("db/migrate/*").max_by { |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
-    gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
-  end
+  gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
 
   inject_into_file("app/models/user.rb", "omniauthable, :", after: "devise :")
 end
@@ -126,21 +130,21 @@ def add_sidekiq
   environment "config.active_job.queue_adapter = :sidekiq"
 
   insert_into_file "config/routes.rb",
-    "require 'sidekiq/web'\n\n",
-    before: "Rails.application.routes.draw do"
+                   "require 'sidekiq/web'\n\n",
+                   before: "Rails.application.routes.draw do"
 
   content = <<~RUBY
-                authenticate :user, lambda { |u| u.admin? } do
-                  mount Sidekiq::Web => '/sidekiq'
+    authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => '/sidekiq'
 
-                  namespace :madmin do
-                    resources :impersonates do
-                      post :impersonate, on: :member
-                      post :stop_impersonating, on: :collection
-                    end
-                  end
-                end
-            RUBY
+      namespace :madmin do
+        resources :impersonates do
+          post :impersonate, on: :member
+          post :stop_impersonating, on: :collection
+        end
+      end
+    end
+  RUBY
   insert_into_file "config/routes.rb", "#{content}\n", after: "Rails.application.routes.draw do\n"
 end
 
@@ -158,14 +162,14 @@ def add_multiple_authentication
 
   generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
-  template = """
+  template = "" "
   env_creds = Rails.application.credentials[Rails.env.to_sym] || {}
   %i{ facebook twitter github }.each do |provider|
     if options = env_creds[provider]
       config.omniauth provider, options[:app_id], options[:app_secret], options.fetch(:options, {})
     end
   end
-  """.strip
+  " "".strip
 
   insert_into_file "config/initializers/devise.rb", "  " + template + "\n\n", before: "  # ==> Warden configuration"
 end
@@ -176,7 +180,7 @@ end
 
 def add_friendly_id
   generate "friendly_id"
-  insert_into_file( Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
+  insert_into_file(Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
 end
 
 def add_sitemap

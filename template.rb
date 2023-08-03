@@ -29,8 +29,14 @@ def rails_version
   @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
 end
 
-def rails_6_or_newer?
-  Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
+def rails_7_or_newer?
+  Gem::Requirement.new(">= 7.0.0.alpha").satisfied_by? rails_version
+end
+
+unless rails_7_or_newer?
+  say "\nJumpstart requires Rails 7 or newer. You are using #{rails_version}.", :green
+  say "Please remove partially installed Jumpstart files #{original_app_name} and try again.", :green
+  exit 1
 end
 
 def add_gems
@@ -206,10 +212,6 @@ end
 
 def gem_exists?(name)
   IO.read("Gemfile") =~ /^\s*gem ['"]#{name}['"]/
-end
-
-unless rails_6_or_newer?
-  puts "Please use Rails 6.0 or newer to create a Jumpstart application"
 end
 
 # Main setup

@@ -162,7 +162,7 @@ def add_multiple_authentication
 
   generate "model Service user:references provider uid access_token access_token_secret refresh_token expires_at:datetime auth:text"
 
-  template = "" "
+  template = """
   env_creds = Rails.application.credentials[Rails.env.to_sym] || {}
   %i{ facebook twitter github }.each do |provider|
     if options = env_creds[provider]

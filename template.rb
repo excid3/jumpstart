@@ -25,12 +25,24 @@ def add_template_repository_to_source_path
   end
 end
 
-def rails_version
-  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
+def read_gemfile?
+  File.open("Gemfile").each_line do |line|
+    return true if line.strip.start_with?("rails") && line.include?("6.")
+  end
 end
 
-def rails_6_or_newer?
-  Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
+def rails_version
+  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING) || read_gemfile?
+end
+
+def rails_7_or_newer?
+  Gem::Requirement.new(">= 7.0.0.alpha").satisfied_by? rails_version
+end
+
+unless rails_7_or_newer?
+  say "\nJumpstart requires Rails 7 or newer. You are using #{rails_version}.", :green
+  say "Please remove partially installed Jumpstart files #{original_app_name} and try again.", :green
+  exit 1
 end
 
 def add_gems
@@ -69,13 +81,11 @@ def add_users
 
   # Set admin default to false
   in_root do
-    migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
+    migration = Dir.glob("db/migrate/*").max_by { |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
-    gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
-  end
+  gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
 
   inject_into_file("app/models/user.rb", "omniauthable, :", after: "devise :")
 end
@@ -120,21 +130,21 @@ def add_sidekiq
   environment "config.active_job.queue_adapter = :sidekiq"
 
   insert_into_file "config/routes.rb",
-    "require 'sidekiq/web'\n\n",
-    before: "Rails.application.routes.draw do"
+                   "require 'sidekiq/web'\n\n",
+                   before: "Rails.application.routes.draw do"
 
   content = <<~RUBY
-                authenticate :user, lambda { |u| u.admin? } do
-                  mount Sidekiq::Web => '/sidekiq'
+    authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => '/sidekiq'
 
-                  namespace :madmin do
-                    resources :impersonates do
-                      post :impersonate, on: :member
-                      post :stop_impersonating, on: :collection
-                    end
-                  end
-                end
-            RUBY
+      namespace :madmin do
+        resources :impersonates do
+          post :impersonate, on: :member
+          post :stop_impersonating, on: :collection
+        end
+      end
+    end
+  RUBY
   insert_into_file "config/routes.rb", "#{content}\n", after: "Rails.application.routes.draw do\n"
 end
 
@@ -170,7 +180,7 @@ end
 
 def add_friendly_id
   generate "friendly_id"
-  insert_into_file( Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
+  insert_into_file(Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
 end
 
 def add_sitemap
@@ -206,10 +216,6 @@ end
 
 def gem_exists?(name)
   IO.read("Gemfile") =~ /^\s*gem ['"]#{name}['"]/
-end
-
-unless rails_6_or_newer?
-  puts "Please use Rails 6.0 or newer to create a Jumpstart application"
 end
 
 # Main setup

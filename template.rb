@@ -211,17 +211,7 @@ def add_esbuild_script
 end
 
 def add_github_actions_ci
-  script = <<~EOS
-    # See https://github.com/andyw8/setup-rails for more information
-  
-    name: Verify
-    on: [push]
-
-    jobs:
-      verify:
-        uses: andyw8/setup-rails/.github/workflows/verify.yml@v1
-  EOS
-  create_file '.github/workflows/verify.yml', script
+  copy_file "github/workflows/verify.yml", ".github/workflows/verify.yml"
 end
 
 def add_gem(name, *options)

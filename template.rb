@@ -210,6 +210,10 @@ def add_esbuild_script
   end
 end
 
+def add_github_actions_ci
+  copy_file "github/workflows/verify.yml", ".github/workflows/verify.yml"
+end
+
 def add_gem(name, *options)
   gem(name, *options) unless gem_exists?(name)
 end
@@ -237,6 +241,7 @@ after_bundle do
   add_whenever
   add_sitemap
   add_announcements_css
+  add_github_actions_ci
   rails_command "active_storage:install"
 
   # Make sure Linux is in the Gemfile.lock for deploying

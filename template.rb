@@ -25,17 +25,29 @@ def add_template_repository_to_source_path
   end
 end
 
-def rails_version
-  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
+def read_gemfile?
+  File.open("Gemfile").each_line do |line|
+    return true if line.strip.start_with?("rails") && line.include?("6.")
+  end
 end
 
-def rails_6_or_newer?
-  Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
+def rails_version
+  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING) || read_gemfile?
+end
+
+def rails_7_or_newer?
+  Gem::Requirement.new(">= 7.0.0.alpha").satisfied_by? rails_version
+end
+
+unless rails_7_or_newer?
+  say "\nJumpstart requires Rails 7 or newer. You are using #{rails_version}.", :green
+  say "Please remove partially installed Jumpstart files #{original_app_name} and try again.", :green
+  exit 1
 end
 
 def add_gems
   add_gem 'cssbundling-rails'
-  add_gem 'devise', '~> 4.8', '>= 4.8.0'
+  add_gem 'devise', '~> 4.9'
   add_gem 'friendly_id', '~> 5.4'
   add_gem 'jsbundling-rails'
   add_gem 'madmin'
@@ -64,45 +76,16 @@ def add_users
   route "root to: 'home#index'"
   generate "devise:install"
 
-  # Configure Devise to handle TURBO_STREAM requests like HTML requests
-  inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
-
-  inject_into_file 'config/initializers/devise.rb', after: "# frozen_string_literal: true\n" do <<~EOF
-    class TurboFailureApp < Devise::FailureApp
-      def respond
-        if request_format == :turbo_stream
-          redirect
-        else
-          super
-        end
-      end
-
-      def skip_format?
-        %w(html turbo_stream */*).include? request_format.to_s
-      end
-    end
-  EOF
-  end
-
-  inject_into_file 'config/initializers/devise.rb', after: "# ==> Warden configuration\n" do <<-EOF
-  config.warden do |manager|
-    manager.failure_app = TurboFailureApp
-  end
-  EOF
-  end
-
   environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
   generate :devise, "User", "first_name", "last_name", "announcements_last_read_at:datetime", "admin:boolean"
 
   # Set admin default to false
   in_root do
-    migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
+    migration = Dir.glob("db/migrate/*").max_by { |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
 
-  if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
-    gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
-  end
+  gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
 
   inject_into_file("app/models/user.rb", "omniauthable, :", after: "devise :")
 end
@@ -111,12 +94,15 @@ def add_authorization
   generate 'pundit:install'
 end
 
-def add_jsbundling
-  rails_command "javascript:install:esbuild"
+def default_to_esbuild
+  return if options[:javascript] == "esbuild"
+  unless options[:skip_javascript]
+    @options = options.merge(javascript: "esbuild")
+  end
 end
 
 def add_javascript
-  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
+  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js chokidar"
 end
 
 def copy_templates
@@ -128,7 +114,7 @@ def copy_templates
   copy_file "Procfile"
   copy_file "Procfile.dev"
   copy_file ".foreman"
-  copy_file "esbuild.config.js"
+  copy_file "esbuild.config.mjs"
   copy_file "app/javascript/application.js"
   copy_file "app/javascript/controllers/index.js"
 
@@ -144,21 +130,21 @@ def add_sidekiq
   environment "config.active_job.queue_adapter = :sidekiq"
 
   insert_into_file "config/routes.rb",
-    "require 'sidekiq/web'\n\n",
-    before: "Rails.application.routes.draw do"
+                   "require 'sidekiq/web'\n\n",
+                   before: "Rails.application.routes.draw do"
 
   content = <<~RUBY
-                authenticate :user, lambda { |u| u.admin? } do
-                  mount Sidekiq::Web => '/sidekiq'
+    authenticate :user, lambda { |u| u.admin? } do
+      mount Sidekiq::Web => '/sidekiq'
 
-                  namespace :madmin do
-                    resources :impersonates do
-                      post :impersonate, on: :member
-                      post :stop_impersonating, on: :collection
-                    end
-                  end
-                end
-            RUBY
+      namespace :madmin do
+        resources :impersonates do
+          post :impersonate, on: :member
+          post :stop_impersonating, on: :collection
+        end
+      end
+    end
+  RUBY
   insert_into_file "config/routes.rb", "#{content}\n", after: "Rails.application.routes.draw do\n"
 end
 
@@ -194,7 +180,7 @@ end
 
 def add_friendly_id
   generate "friendly_id"
-  insert_into_file( Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
+  insert_into_file(Dir["db/migrate/**/*friendly_id_slugs.rb"].first, "[5.2]", after: "ActiveRecord::Migration")
 end
 
 def add_sitemap
@@ -210,12 +196,17 @@ def add_announcements_css
 end
 
 def add_esbuild_script
-  build_script = "node esbuild.config.js"
+  build_script = "node esbuild.config.mjs"
 
-  if (`npx -v`.to_f < 7.1 rescue "Missing")
-    say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
-  else
+  case `npx -v`.to_f
+  when 7.1...8.0
     run %(npm set-script build "#{build_script}")
+    run %(yarn build)
+  when (8.0..)
+    run %(npm pkg set scripts.build="#{build_script}")
+    run %(yarn build)
+  else
+    say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
   end
 end
 
@@ -241,20 +232,15 @@ def gem_exists?(name)
   IO.read("Gemfile") =~ /^\s*gem ['"]#{name}['"]/
 end
 
-unless rails_6_or_newer?
-  puts "Please use Rails 6.0 or newer to create a Jumpstart application"
-end
-
 # Main setup
 add_template_repository_to_source_path
-
+default_to_esbuild
 add_gems
 
 after_bundle do
   set_application_name
   add_users
   add_authorization
-  add_jsbundling
   add_javascript
   add_announcements
   add_notifications
@@ -265,7 +251,6 @@ after_bundle do
   add_whenever
   add_sitemap
   add_announcements_css
-  add_esbuild_script
   add_github_actions_ci
   rails_command "active_storage:install"
 
@@ -273,6 +258,8 @@ after_bundle do
   run "bundle lock --add-platform x86_64-linux"
 
   copy_templates
+
+  add_esbuild_script
 
   # Commit everything to git
   unless ENV["SKIP_GIT"]
@@ -294,8 +281,9 @@ after_bundle do
   say
   say "  # Update config/database.yml with your database credentials"
   say
-  say "  rails db:create db:migrate"
+  say "  rails db:create"
   say "  rails g noticed:model"
+  say "  rails db:migrate"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"
   say "  bin/dev"

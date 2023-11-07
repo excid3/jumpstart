@@ -169,7 +169,7 @@ def add_multiple_authentication
       config.omniauth provider, options[:app_id], options[:app_secret], options.fetch(:options, {})
     end
   end
-  " "".strip
+  """.strip
 
   insert_into_file "config/initializers/devise.rb", "  " + template + "\n\n", before: "  # ==> Warden configuration"
 end

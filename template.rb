@@ -40,7 +40,7 @@ def add_gems
   add_gem 'jsbundling-rails'
   add_gem 'madmin'
   add_gem 'name_of_person', '~> 1.1'
-  add_gem 'noticed', '~> 1.4'
+  add_gem 'noticed', '~> 2.0'
   add_gem 'omniauth-facebook', '~> 8.0'
   add_gem 'omniauth-github', '~> 2.0'
   add_gem 'omniauth-twitter', '~> 1.4'
@@ -144,6 +144,7 @@ def add_announcements
 end
 
 def add_notifications
+  rails_command "noticed:install:migrations"
   route "resources :notifications, only: [:index]"
 end
 
@@ -261,7 +262,6 @@ after_bundle do
   say "  # Update config/database.yml with your database credentials"
   say
   say "  rails db:create"
-  say "  rails g noticed:model"
   say "  rails db:migrate"
   say "  rails g madmin:install # Generate admin dashboards"
   say "  gem install foreman"

@@ -51,7 +51,7 @@ def add_gems
   add_gem 'friendly_id', '~> 5.4'
   add_gem 'jsbundling-rails'
   add_gem 'madmin'
-  add_gem 'name_of_person', '~> 1.1'
+  add_gem 'name_of_person', github: "basecamp/name_of_person" # '~> 1.1'
   add_gem 'noticed', '~> 2.0'
   add_gem 'omniauth-facebook', '~> 8.0'
   add_gem 'omniauth-github', '~> 2.0'

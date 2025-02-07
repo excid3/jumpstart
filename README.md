@@ -1,17 +1,10 @@
-> [!NOTE]
-> 👉 We've also built [Jumpstart Pro](https://jumpstartrails.com) which is a version of Jumpstart that includes payments with Stripe & Braintree, team accounts, TailwindCSS, and much more.
+> [!IMPORTANT]
+> 👉 This has evolved into [Jumpstart Pro](https://jumpstartrails.com), a Rails template that includes payments, team accounts, TailwindCSS, APIs, Hotwire Native, and much, much more.
+> Check it out at https://jumpstartrails.com
 
-# Jumpstart Rails Template
+# GoRails App Template
 
-All your Rails apps should start off with a bunch of great defaults. It's like Laravel Spark, for Rails.
-
-Want to see how it works? Check out [the Jumpstart walkthrough video](https://www.youtube.com/watch?v=ssOZpISfIfI):
-
-[![Jumpstart Ruby on Rails Template Walkthrough](https://i.imgur.com/pZDPbc7l.png)](https://www.youtube.com/watch?v=ssOZpISfIfI)
-
-## Getting Started
-
-Jumpstart is a Rails template, so you pass it in as an option when creating a new app.
+This is a Rails template, so you pass it in as an option when creating a new app.
 
 #### Requirements
 
@@ -29,7 +22,7 @@ You'll need the following installed to run the template successfully:
 #### Creating a new app
 
 ```bash
-rails new myapp -d postgresql -m https://raw.githubusercontent.com/excid3/jumpstart/master/template.rb
+rails new myapp -d postgresql -m https://raw.githubusercontent.com/excid3/gorails-app-template/master/template.rb
 ```
 
 Or if you have downloaded this repo, you can reference template.rb locally:
